@@ -316,3 +316,31 @@
 - `frontend/src/components/ProtectedRoute.tsx` — [NEW] Route guard
 - `frontend/src/pages/(Dashboard|Login|Register|Admin).tsx` — [NEW] Route placeholders
 - `frontend/src/App.tsx` — [MODIFIED] Registered routes and AuthProvider
+
+---
+
+## Phase 4, Step 4.2: Authentication Views
+
+**Prompt:**
+> Step 4.2: Authentication Views
+> - Build `Login.tsx` and `Register.tsx` pages.
+> - Implement forms with Tailwind styling, loading states, and error handling (displaying API errors gracefully).
+> - On successful login/register, update `AuthContext` and redirect to the Dashboard.
+
+**Phase:** Phase 4 — Frontend Implementation (React + Tailwind)
+
+**Technical Objective:**
+- Create fully styled login and registration forms using Tailwind CSS and `lucide-react` icons.
+- Add client-side state for form inputs, loading statuses, and server error messages.
+- Connect forms to the backend using the `/api/auth/login` and `/api/auth/register` endpoints.
+- Update global `AuthContext` and redirect users upon successful authentication.
+
+**Execution Cycle:**
+1. Implemented `Login.tsx` with email/password inputs, error display, and a submit handler integrating with `AuthContext`.
+2. Implemented `Register.tsx` with name/email/password inputs, loading spinner (`Loader2`), and error catching.
+3. Added proxy configuration to `vite.config.ts` to forward `/api` requests to `localhost:5000`.
+
+**Files Modified:**
+- `frontend/vite.config.ts` — [MODIFIED] Added API proxy
+- `frontend/src/pages/Login.tsx` — [MODIFIED] Full implementation
+- `frontend/src/pages/Register.tsx` — [MODIFIED] Full implementation
