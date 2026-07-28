@@ -141,3 +141,28 @@
 ---
 
 ### ✅ PHASE 2 COMPLETE — 44 tests, 7 test suites, all GREEN
+
+---
+
+## Phase 3, Step 3.1: Vehicle Model
+
+**Prompt:**
+> Step 3.1: Vehicle Model (`src/models/Vehicle.ts`)
+> - Fields: `make` (string, req), `model` (string, req), `category` (string, req, e.g. Sedan, SUV, Truck, Electric), `price` (number, req, min 0), `quantity` (number, req, min 0, default 1), `year` (number, req), `description` (string).
+> - Add unit tests verifying schema validations and defaults.
+
+**Phase:** Phase 3 — Vehicle & Inventory Management (Backend TDD)
+
+**Technical Objective:**
+- Create `Vehicle` Mongoose model matching the exact schema requirements.
+- Add validations for min values (price >= 0, quantity >= 0).
+- Test required fields, defaults (quantity 1), and trim options.
+
+**TDD Cycle:**
+1. 🔴 RED — Wrote `vehicle-model.test.ts` with 14 tests. Failed with `Cannot find module '../models/Vehicle'`.
+2. 🟢 GREEN — Implemented `Vehicle` model in `models/Vehicle.ts`. Fixed a TS conflict where interface shouldn't extend `Document` to avoid `model` property clash. All 14 tests pass.
+3. 🔄 REFACTOR — Verified model constraints.
+
+**Files Modified:**
+- `backend/src/__tests__/vehicle-model.test.ts` — [NEW] Vehicle model test suite (14 tests)
+- `backend/src/models/Vehicle.ts` — [NEW] Vehicle Mongoose model
