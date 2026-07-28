@@ -166,3 +166,31 @@
 **Files Modified:**
 - `backend/src/__tests__/vehicle-model.test.ts` — [NEW] Vehicle model test suite (14 tests)
 - `backend/src/models/Vehicle.ts` — [NEW] Vehicle Mongoose model
+
+---
+
+## Phase 3, Step 3.2: Vehicle Creation & Listing
+
+**Prompt:**
+> Step 3.2 (TDD): Vehicle Creation & Listing
+> - `POST /api/vehicles`: Admin protected. Validates inputs, creates new vehicle (201). Non-admin returns 403, unauthenticated returns 401.
+> - `GET /api/vehicles`: Protected (all authenticated users). Returns list of available vehicles.
+> - Write integration tests covering all success/failure routes.
+
+**Phase:** Phase 3 — Vehicle & Inventory Management (Backend TDD)
+
+**Technical Objective:**
+- Implement `POST /api/vehicles` accessible only to admins.
+- Implement `GET /api/vehicles` accessible to all authenticated users.
+- Add robust tests validating role restrictions, input requirements, and successful list retrieval.
+
+**TDD Cycle:**
+1. 🔴 RED — Wrote `vehicle-api.test.ts` with 6 integration tests. All failed with 404.
+2. 🟢 GREEN — Implemented `createVehicle` and `getVehicles` in `vehicleController.ts`, mapped in `vehicleRoutes.ts`, wired in `app.ts`. All 6 tests pass.
+3. 🔄 REFACTOR — Kept controller logic clean by delegating to Mongoose validation and existing role middlewares.
+
+**Files Modified:**
+- `backend/src/__tests__/vehicle-api.test.ts` — [NEW] Vehicle API test suite (6 tests)
+- `backend/src/controllers/vehicleController.ts` — [NEW] Controller for vehicle logic
+- `backend/src/routes/vehicleRoutes.ts` — [NEW] Routes for vehicle API
+- `backend/src/app.ts` — [MODIFIED] Wired vehicle routes
