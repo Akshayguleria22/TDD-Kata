@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import api from '../api/axios';
-import { Vehicle } from '../components/VehicleCard';
+import type { Vehicle } from '../components/VehicleCard';
 import { Plus, Edit2, Trash2, PackagePlus, X, Loader2 } from 'lucide-react';
 
 const Admin = () => {

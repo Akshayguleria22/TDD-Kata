@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import Navbar from '../components/Navbar';
-import VehicleCard, { Vehicle } from '../components/VehicleCard';
+import VehicleCard, { type Vehicle } from '../components/VehicleCard';
 import api from '../api/axios';
-import { Search, Loader2, FilterX } from 'lucide-react';
+import { Search, Loader2, FilterX, CarFront } from 'lucide-react';
 
 const Dashboard = () => {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
