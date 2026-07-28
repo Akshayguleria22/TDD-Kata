@@ -58,3 +58,31 @@
 - `backend/src/__tests__/auth-helpers.test.ts` — [NEW] JWT auth helpers test suite (6 tests)
 - `backend/src/models/User.ts` — [NEW] Mongoose User model with bcrypt hashing
 - `backend/src/utils/auth.ts` — [NEW] JWT generateToken/verifyToken helpers
+
+---
+
+## Phase 2, Step 2.3: Auth API — POST /api/auth/register
+
+**Prompt:**
+> Implement POST /api/auth/register with TDD. Validate email, hash passwords, handle duplicate user errors, return JWT token and user profile.
+
+**Phase:** Phase 2 — Database Connection & User Authentication (Backend TDD)
+
+**Technical Objective:**
+- Create `POST /api/auth/register` endpoint with full validation.
+- Return 201 with `{ success, data: { user, token } }` on success.
+- Return 400 for missing fields or invalid email format.
+- Return 409 for duplicate email registration.
+- Exclude password from response body.
+- Default role to `"user"`.
+
+**TDD Cycle:**
+1. 🔴 RED — Wrote `auth-register.test.ts` with 9 integration tests. All returned 404 (route not implemented).
+2. 🟢 GREEN — Created `controllers/authController.ts`, `routes/authRoutes.ts`, wired into `app.ts`. All 28 tests pass.
+3. 🔄 REFACTOR — Clean controller with early-return validation pattern, email regex validation, proper HTTP status codes.
+
+**Files Modified:**
+- `backend/src/__tests__/auth-register.test.ts` — [NEW] Register endpoint test suite (9 tests)
+- `backend/src/controllers/authController.ts` — [NEW] Auth controller with register handler
+- `backend/src/routes/authRoutes.ts` — [NEW] Auth routes with POST /register
+- `backend/src/app.ts` — [MODIFIED] Wired auth routes at /api/auth
