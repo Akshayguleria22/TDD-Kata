@@ -222,3 +222,31 @@
 - `backend/src/__tests__/vehicle-search.test.ts` — [NEW] Vehicle search test suite (10 tests)
 - `backend/src/controllers/vehicleController.ts` — [MODIFIED] Added searchVehicles handler
 - `backend/src/routes/vehicleRoutes.ts` — [MODIFIED] Added GET /search route
+
+---
+
+## Phase 3, Step 3.4: Vehicle CRUD (Update & Delete)
+
+**Prompt:**
+> Step 3.4 (TDD): Vehicle CRUD (Update & Delete)
+> - `PUT /api/vehicles/:id`: Admin protected. Update vehicle details. Returns 404 if vehicle not found.
+> - `DELETE /api/vehicles/:id`: Admin protected. Deletes vehicle. Returns 404 if not found. Non-admin returns 403.
+> - Write integration tests for update/delete scenarios.
+
+**Phase:** Phase 3 — Vehicle & Inventory Management (Backend TDD)
+
+**Technical Objective:**
+- Implement `PUT /api/vehicles/:id` for admins only, supporting partial updates.
+- Implement `DELETE /api/vehicles/:id` for admins only.
+- Validate `id` format to prevent unhandled cast errors.
+- Return 404 appropriately.
+
+**TDD Cycle:**
+1. 🔴 RED — Wrote `vehicle-crud.test.ts` with 10 tests for update and delete including auth, 404, and invalid ID scenarios. All failed with 404.
+2. 🟢 GREEN — Added `updateVehicle` and `deleteVehicle` to `vehicleController.ts` and wired to routes. Fixed TS typing errors for ID validation. All 10 tests pass.
+3. 🔄 REFACTOR — Replaced deprecated `new: true` option in Mongoose with `returnDocument: 'after'`.
+
+**Files Modified:**
+- `backend/src/__tests__/vehicle-crud.test.ts` — [NEW] Vehicle update and delete test suite (10 tests)
+- `backend/src/controllers/vehicleController.ts` — [MODIFIED] Added update and delete handlers
+- `backend/src/routes/vehicleRoutes.ts` — [MODIFIED] Mapped PUT and DELETE endpoints

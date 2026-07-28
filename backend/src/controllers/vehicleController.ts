@@ -110,3 +110,60 @@ export const searchVehicles = async (req: Request, res: Response): Promise<void>
     });
   }
 };
+
+/**
+ * PUT /api/vehicles/:id
+ * Update a vehicle (Admin only)
+ */
+export const updateVehicle = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    
+    // Check if valid ObjectId
+    if (typeof id !== 'string' || !id.match(/^[0-9a-fA-F]{24}$/)) {
+      res.status(400).json({ success: false, message: 'Invalid vehicle ID' });
+      return;
+    }
+
+    const vehicle = await Vehicle.findByIdAndUpdate(id, req.body, {
+      returnDocument: 'after',
+      runValidators: true,
+    });
+
+    if (!vehicle) {
+      res.status(404).json({ success: false, message: 'Vehicle not found' });
+      return;
+    }
+
+    res.status(200).json({ success: true, data: vehicle });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};
+
+/**
+ * DELETE /api/vehicles/:id
+ * Delete a vehicle (Admin only)
+ */
+export const deleteVehicle = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    
+    // Check if valid ObjectId
+    if (typeof id !== 'string' || !id.match(/^[0-9a-fA-F]{24}$/)) {
+      res.status(400).json({ success: false, message: 'Invalid vehicle ID' });
+      return;
+    }
+
+    const vehicle = await Vehicle.findByIdAndDelete(id);
+
+    if (!vehicle) {
+      res.status(404).json({ success: false, message: 'Vehicle not found' });
+      return;
+    }
+
+    res.status(200).json({ success: true, data: {} });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};
