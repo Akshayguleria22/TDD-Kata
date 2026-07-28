@@ -113,3 +113,31 @@
 - `backend/src/__tests__/auth-login.test.ts` — [NEW] Login endpoint test suite (8 tests)
 - `backend/src/controllers/authController.ts` — [MODIFIED] Added login handler
 - `backend/src/routes/authRoutes.ts` — [MODIFIED] Added POST /login route
+
+---
+
+## Phase 2, Step 2.5: Authentication & Authorization Middleware
+
+**Prompt:**
+> Implement authMiddleware (JWT validation, user attachment) and adminOnlyMiddleware (role-based access control) with TDD.
+
+**Phase:** Phase 2 — Database Connection & User Authentication (Backend TDD)
+
+**Technical Objective:**
+- Create `authMiddleware` that validates Bearer JWT tokens, looks up user, and attaches to `req.user`.
+- Create `adminOnlyMiddleware` that checks `req.user.role === 'admin'`, returns 403 otherwise.
+- Handle missing token (401), invalid token (401), expired token (401), malformed header (401).
+- Exclude password from the attached user object.
+
+**TDD Cycle:**
+1. 🔴 RED — Wrote `auth-middleware.test.ts` with 8 tests using a test Express app with `/protected` and `/admin` routes. Failed with `Cannot find module '../middleware/authMiddleware'`.
+2. 🟢 GREEN — Implemented `middleware/authMiddleware.ts` with both middleware functions. All 44 tests pass.
+3. 🔄 REFACTOR — Clean separation: authMiddleware handles authentication, adminOnlyMiddleware handles authorization.
+
+**Files Modified:**
+- `backend/src/__tests__/auth-middleware.test.ts` — [NEW] Middleware test suite (8 tests)
+- `backend/src/middleware/authMiddleware.ts` — [NEW] Auth + Admin middleware
+
+---
+
+### ✅ PHASE 2 COMPLETE — 44 tests, 7 test suites, all GREEN
