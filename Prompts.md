@@ -86,3 +86,30 @@
 - `backend/src/controllers/authController.ts` — [NEW] Auth controller with register handler
 - `backend/src/routes/authRoutes.ts` — [NEW] Auth routes with POST /register
 - `backend/src/app.ts` — [MODIFIED] Wired auth routes at /api/auth
+
+---
+
+## Phase 2, Step 2.4: Auth API — POST /api/auth/login
+
+**Prompt:**
+> Implement POST /api/auth/login with TDD. Validate credentials, return JWT and user profile including role.
+
+**Phase:** Phase 2 — Database Connection & User Authentication (Backend TDD)
+
+**Technical Objective:**
+- Create `POST /api/auth/login` endpoint.
+- Return 200 with `{ success, data: { user, token } }` on valid credentials.
+- Return 401 for incorrect password or non-existent email (same message to prevent enumeration).
+- Return 400 for missing email or password fields.
+- Include user `role` ("admin" | "user") in response.
+- Exclude password from response body.
+
+**TDD Cycle:**
+1. 🔴 RED — Wrote `auth-login.test.ts` with 8 integration tests. All returned 404.
+2. 🟢 GREEN — Added `login` handler to `authController.ts`, added route to `authRoutes.ts`. All 36 tests pass.
+3. 🔄 REFACTOR — Consistent error message for invalid credentials (prevents user enumeration).
+
+**Files Modified:**
+- `backend/src/__tests__/auth-login.test.ts` — [NEW] Login endpoint test suite (8 tests)
+- `backend/src/controllers/authController.ts` — [MODIFIED] Added login handler
+- `backend/src/routes/authRoutes.ts` — [MODIFIED] Added POST /login route
