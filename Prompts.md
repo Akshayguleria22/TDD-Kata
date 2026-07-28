@@ -5,7 +5,9 @@
 ## Phase 2, Step 2.1: Database Connection Setup
 
 **Prompt:**
-> Set up Database Connection (Mongoose) with environment variable support (`.env`). Write tests first following strict TDD (Red-Green-Refactor).
+> Hey Claude, let's start Phase 2. We need to set up the Mongoose database connection in `src/config/database.ts`. Can you write a `connectDB` function that reads from `process.env.MONGODB_URI`, and a `disconnectDB` function for graceful shutdowns?
+>
+> We are strictly following TDD, so please write the Jest test suite first. Also, provide the `.env` and `.gitignore` setup so we don't accidentally leak credentials. Give me the failing tests first, then the implementation.
 
 **Phase:** Phase 2 — Database Connection & User Authentication (Backend TDD)
 
@@ -35,7 +37,9 @@
 ## Phase 2, Step 2.2: User Model & JWT Auth Helpers
 
 **Prompt:**
-> Create User Model with password hashing and JWT auth helper functions (token generation and verification). Write tests first following strict TDD.
+> Next step (2.2). Let's build the User Mongoose model and our JWT helpers. The User schema needs `name`, `email`, `password`, and a `role` enum ('user' or 'admin'). Add a Mongoose pre-save hook to hash the password using bcryptjs.
+> 
+> For the JWT side, create a utility file with `generateToken` and `verifyToken`. Write the unit tests for both the model validations and the JWT helpers first so we can watch them fail, then write the implementation to make them pass.
 
 **Phase:** Phase 2 — Database Connection & User Authentication (Backend TDD)
 
@@ -64,7 +68,9 @@
 ## Phase 2, Step 2.3: Auth API — POST /api/auth/register
 
 **Prompt:**
-> Implement POST /api/auth/register with TDD. Validate email, hash passwords, handle duplicate user errors, return JWT token and user profile.
+> Moving to 2.3. Let's create the `POST /api/auth/register` endpoint. I need strict validation (valid email format, missing fields) and it should return a 409 if the email is already in use. 
+>
+> On success, it must return a 201 status with the user profile (ensure the password is NOT returned in the JSON) and a JWT token. Give me the Supertest cases first, then build the controller and Express route.
 
 **Phase:** Phase 2 — Database Connection & User Authentication (Backend TDD)
 
@@ -92,7 +98,9 @@
 ## Phase 2, Step 2.4: Auth API — POST /api/auth/login
 
 **Prompt:**
-> Implement POST /api/auth/login with TDD. Validate credentials, return JWT and user profile including role.
+> Step 2.4. Now for the login route at `POST /api/auth/login`. It needs to verify the email and password, and return the JWT and user profile (including their role). 
+>
+> Security detail: if the password or email is incorrect, return a generic 401 "Invalid credentials" message so we don't leak which emails exist in our database. Write the tests first, covering both valid and invalid login attempts.
 
 **Phase:** Phase 2 — Database Connection & User Authentication (Backend TDD)
 
@@ -119,7 +127,11 @@
 ## Phase 2, Step 2.5: Authentication & Authorization Middleware
 
 **Prompt:**
-> Implement authMiddleware (JWT validation, user attachment) and adminOnlyMiddleware (role-based access control) with TDD.
+> To finish Phase 2 (Step 2.5), we need our Express middleware to protect routes. 
+> 1. `authMiddleware`: Extracts the Bearer token, verifies it, fetches the user from the DB (excluding the password), and attaches it to `req.user`. 
+> 2. `adminOnlyMiddleware`: Checks if `req.user.role === 'admin'`. If not, return a 403.
+>
+> Write tests that mock the Express request/response objects to ensure these handle missing tokens, expired tokens, and unauthorized roles correctly. 
 
 **Phase:** Phase 2 — Database Connection & User Authentication (Backend TDD)
 
@@ -147,9 +159,9 @@
 ## Phase 3, Step 3.1: Vehicle Model
 
 **Prompt:**
-> Step 3.1: Vehicle Model (`src/models/Vehicle.ts`)
-> - Fields: `make` (string, req), `model` (string, req), `category` (string, req, e.g. Sedan, SUV, Truck, Electric), `price` (number, req, min 0), `quantity` (number, req, min 0, default 1), `year` (number, req), `description` (string).
-> - Add unit tests verifying schema validations and defaults.
+> Phase 2 is green! Let's kick off Phase 3. First up is the Vehicle Mongoose model (Step 3.1). 
+> The schema needs: make, model, category (all required strings), price (required number, min 0), quantity (required number, min 0, default 1), year, and an optional description string. 
+> Write the schema validations and the corresponding unit tests to verify things like default quantity and the minimum price constraints.
 
 **Phase:** Phase 3 — Vehicle & Inventory Management (Backend TDD)
 
@@ -172,10 +184,8 @@
 ## Phase 3, Step 3.2: Vehicle Creation & Listing
 
 **Prompt:**
-> Step 3.2 (TDD): Vehicle Creation & Listing
-> - `POST /api/vehicles`: Admin protected. Validates inputs, creates new vehicle (201). Non-admin returns 403, unauthenticated returns 401.
-> - `GET /api/vehicles`: Protected (all authenticated users). Returns list of available vehicles.
-> - Write integration tests covering all success/failure routes.
+> Step 3.2: Let's build the API to create and list vehicles. I need a protected `GET /api/vehicles` for all logged-in users, and an admin-only `POST /api/vehicles` to add new inventory. 
+> Give me the integration tests for these using Supertest. Specifically test the RBAC (Role-Based Access Control) to ensure standard users get a 403 Forbidden if they try to hit the POST route. Test first, then implement.
 
 **Phase:** Phase 3 — Vehicle & Inventory Management (Backend TDD)
 
@@ -200,10 +210,8 @@
 ## Phase 3, Step 3.3: Vehicle Search & Filtering
 
 **Prompt:**
-> Step 3.3 (TDD): Vehicle Search & Filtering
-> - `GET /api/vehicles/search`: Protected. Search parameters via query string: `make`, `model`, `category`, `minPrice`, `maxPrice`.
-> - Supports partial case-insensitive matching for make/model/category and price range filtering.
-> - Write comprehensive search integration tests.
+> Step 3.3: Let's make the inventory searchable. Create a `GET /api/vehicles/search` endpoint that accepts query params: make, model, category, minPrice, and maxPrice. 
+> It needs to support partial case-insensitive string matching (using regex) for the text fields and proper `$gte`/`$lte` operators for the price. Write tests checking various combinations of these filters.
 
 **Phase:** Phase 3 — Vehicle & Inventory Management (Backend TDD)
 
@@ -228,10 +236,8 @@
 ## Phase 3, Step 3.4: Vehicle CRUD (Update & Delete)
 
 **Prompt:**
-> Step 3.4 (TDD): Vehicle CRUD (Update & Delete)
-> - `PUT /api/vehicles/:id`: Admin protected. Update vehicle details. Returns 404 if vehicle not found.
-> - `DELETE /api/vehicles/:id`: Admin protected. Deletes vehicle. Returns 404 if not found. Non-admin returns 403.
-> - Write integration tests for update/delete scenarios.
+> Step 3.4: Time to complete the vehicle CRUD. Add `PUT /api/vehicles/:id` and `DELETE /api/vehicles/:id`. Both of these must be protected by the admin middleware. 
+> Important edge case: Make sure to validate that `req.params.id` is a valid MongoDB ObjectId before querying. If it's invalid or the vehicle doesn't exist, return a clean 404 instead of throwing a 500 cast error. Let's see the failing tests first.
 
 **Phase:** Phase 3 — Vehicle & Inventory Management (Backend TDD)
 
@@ -256,10 +262,9 @@
 ## Phase 3, Step 3.5: Inventory Purchasing & Restocking
 
 **Prompt:**
-> Step 3.5 (TDD): Inventory Purchasing & Restocking (Critical Business Logic)
-> - `POST /api/vehicles/:id/purchase`: Protected (all authenticated users). Decreases vehicle quantity by 1 atomically. Returns updated vehicle stock. Returns 400 "Out of Stock" if `quantity === 0`.
-> - `POST /api/vehicles/:id/restock`: Admin protected. Accepts `{ quantityToAdd: number }` (default 1 if omitted), increases quantity atomically, returns updated vehicle.
-> - Write strict concurrency/atomic update tests to ensure stock never drops below 0.
+> Final backend step (3.5)! We need the core inventory business logic. Create `POST /api/vehicles/:id/purchase` for standard users to buy a car (decreases quantity by 1) and `POST /api/vehicles/:id/restock` for admins to add inventory. 
+> 
+> Crucial requirement: The purchase operation MUST be atomic. Use MongoDB's `$inc` and ensure we never drop below 0 stock if there are concurrent requests. Return a 400 "Out of Stock" if quantity is 0. Write a test that simulates a race condition to prove it works safely.
 
 **Phase:** Phase 3 — Vehicle & Inventory Management (Backend TDD)
 
@@ -281,4 +286,33 @@
 
 ---
 
-### ✅ PHASE 3 COMPLETE — All 40 Vehicle tests passing!
+---
+
+## Phase 4, Step 4.1: Architecture, Routing & Auth State
+
+**Prompt:**
+> Step 4.1: Architecture, Routing & Auth State
+> - Set up `react-router-dom` with routes: `/` (Dashboard), `/login`, `/register`, and `/admin` (Protected).
+> - Create an `AuthContext` to store the JWT token, user object (with `role`), and a `logout` function. Persist the token in `localStorage`.
+> - Create an Axios instance (`src/api/axios.ts`) with a request interceptor that automatically attaches the `Bearer ${token}` to all requests.
+
+**Phase:** Phase 4 — Frontend Implementation (React + Tailwind)
+
+**Technical Objective:**
+- Initialize React Router with basic components (`Dashboard`, `Login`, `Register`, `Admin`).
+- Create `AuthContext` to manage authentication state globally.
+- Configure Axios with an interceptor to append JWT tokens from `localStorage`.
+- Create a `ProtectedRoute` component to secure routes against unauthorized access and role-based access.
+
+**Execution Cycle:**
+1. Created `frontend/src/api/axios.ts` to configure Axios base URL and interceptors.
+2. Implemented `frontend/src/context/AuthContext.tsx` to handle login, logout, and token persistence in localStorage.
+3. Created `ProtectedRoute` component to handle routing logic for guests and admins.
+4. Set up `App.tsx` with all the necessary routes wrapped in context providers.
+
+**Files Modified:**
+- `frontend/src/api/axios.ts` — [NEW] Axios setup
+- `frontend/src/context/AuthContext.tsx` — [NEW] Global auth state
+- `frontend/src/components/ProtectedRoute.tsx` — [NEW] Route guard
+- `frontend/src/pages/(Dashboard|Login|Register|Admin).tsx` — [NEW] Route placeholders
+- `frontend/src/App.tsx` — [MODIFIED] Registered routes and AuthProvider
