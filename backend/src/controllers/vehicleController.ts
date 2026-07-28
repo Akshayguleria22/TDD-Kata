@@ -167,3 +167,80 @@ export const deleteVehicle = async (req: Request, res: Response): Promise<void> 
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
+
+/**
+ * POST /api/vehicles/:id/purchase
+ * Purchase a vehicle (decrease stock by 1 atomically)
+ */
+export const purchaseVehicle = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    if (typeof id !== 'string' || !id.match(/^[0-9a-fA-F]{24}$/)) {
+      res.status(400).json({ success: false, message: 'Invalid vehicle ID' });
+      return;
+    }
+
+    // Atomic update: only decrement if quantity > 0
+    const vehicle = await Vehicle.findOneAndUpdate(
+      { _id: id, quantity: { $gt: 0 } },
+      { $inc: { quantity: -1 } },
+      { returnDocument: 'after', runValidators: true }
+    );
+
+    if (!vehicle) {
+      // Differentiate between 404 Not Found and 400 Out of Stock
+      const existingVehicle = await Vehicle.findById(id);
+      if (!existingVehicle) {
+        res.status(404).json({ success: false, message: 'Vehicle not found' });
+        return;
+      }
+      res.status(400).json({ success: false, message: 'Vehicle is out of stock' });
+      return;
+    }
+
+    res.status(200).json({ success: true, data: vehicle });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};
+
+/**
+ * POST /api/vehicles/:id/restock
+ * Restock a vehicle (increase stock atomically, Admin only)
+ */
+export const restockVehicle = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    let { quantityToAdd } = req.body;
+
+    if (typeof id !== 'string' || !id.match(/^[0-9a-fA-F]{24}$/)) {
+      res.status(400).json({ success: false, message: 'Invalid vehicle ID' });
+      return;
+    }
+
+    if (quantityToAdd === undefined) {
+      quantityToAdd = 1;
+    }
+
+    if (typeof quantityToAdd !== 'number' || quantityToAdd < 0) {
+      res.status(400).json({ success: false, message: 'quantityToAdd must be a positive number' });
+      return;
+    }
+
+    const vehicle = await Vehicle.findByIdAndUpdate(
+      id,
+      { $inc: { quantity: quantityToAdd } },
+      { returnDocument: 'after', runValidators: true }
+    );
+
+    if (!vehicle) {
+      res.status(404).json({ success: false, message: 'Vehicle not found' });
+      return;
+    }
+
+    res.status(200).json({ success: true, data: vehicle });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};

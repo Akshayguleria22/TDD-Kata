@@ -1,6 +1,14 @@
 // backend/src/routes/vehicleRoutes.ts
 import { Router } from 'express';
-import { createVehicle, getVehicles, searchVehicles, updateVehicle, deleteVehicle } from '../controllers/vehicleController';
+import { 
+  createVehicle, 
+  getVehicles, 
+  searchVehicles, 
+  updateVehicle, 
+  deleteVehicle,
+  purchaseVehicle,
+  restockVehicle
+} from '../controllers/vehicleController';
 import { authMiddleware, adminOnlyMiddleware } from '../middleware/authMiddleware';
 
 const router = Router();
@@ -14,5 +22,8 @@ router.get('/', getVehicles);
 
 router.put('/:id', adminOnlyMiddleware, updateVehicle);
 router.delete('/:id', adminOnlyMiddleware, deleteVehicle);
+
+router.post('/:id/purchase', purchaseVehicle); // Any authenticated user
+router.post('/:id/restock', adminOnlyMiddleware, restockVehicle); // Admin only
 
 export default router;

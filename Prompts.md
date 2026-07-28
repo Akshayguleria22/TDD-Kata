@@ -250,3 +250,35 @@
 - `backend/src/__tests__/vehicle-crud.test.ts` — [NEW] Vehicle update and delete test suite (10 tests)
 - `backend/src/controllers/vehicleController.ts` — [MODIFIED] Added update and delete handlers
 - `backend/src/routes/vehicleRoutes.ts` — [MODIFIED] Mapped PUT and DELETE endpoints
+
+---
+
+## Phase 3, Step 3.5: Inventory Purchasing & Restocking
+
+**Prompt:**
+> Step 3.5 (TDD): Inventory Purchasing & Restocking (Critical Business Logic)
+> - `POST /api/vehicles/:id/purchase`: Protected (all authenticated users). Decreases vehicle quantity by 1 atomically. Returns updated vehicle stock. Returns 400 "Out of Stock" if `quantity === 0`.
+> - `POST /api/vehicles/:id/restock`: Admin protected. Accepts `{ quantityToAdd: number }` (default 1 if omitted), increases quantity atomically, returns updated vehicle.
+> - Write strict concurrency/atomic update tests to ensure stock never drops below 0.
+
+**Phase:** Phase 3 — Vehicle & Inventory Management (Backend TDD)
+
+**Technical Objective:**
+- Implement atomic decrement for purchase using `findOneAndUpdate` with condition `{ quantity: { $gt: 0 } }`.
+- Validate concurrent requests do not cause negative stock.
+- Implement atomic increment for restock with input validation for `quantityToAdd`.
+- Differentiate between 404 (Not Found) and 400 (Out of Stock).
+
+**TDD Cycle:**
+1. 🔴 RED — Wrote `vehicle-inventory.test.ts` with 10 strict integration tests, including a concurrent purchase simulation. All failed.
+2. 🟢 GREEN — Implemented `purchaseVehicle` and `restockVehicle` using MongoDB `$inc` operator for atomicity. All 10 tests pass.
+3. 🔄 REFACTOR — Extracted ObjectId validation to avoid casting errors, returned appropriate error codes.
+
+**Files Modified:**
+- `backend/src/__tests__/vehicle-inventory.test.ts` — [NEW] Inventory test suite (10 tests)
+- `backend/src/controllers/vehicleController.ts` — [MODIFIED] Added purchase and restock handlers
+- `backend/src/routes/vehicleRoutes.ts` — [MODIFIED] Mapped POST /purchase and POST /restock endpoints
+
+---
+
+### ✅ PHASE 3 COMPLETE — All 40 Vehicle tests passing!
