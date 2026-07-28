@@ -29,3 +29,32 @@
 - `backend/.env.example` — [NEW] Example env template (committed)
 - `backend/.gitignore` — [NEW] Excludes node_modules, dist, .env, coverage
 - `backend/package.json` — [MODIFIED] Added `mongodb-memory-server`, fixed TypeScript version
+
+---
+
+## Phase 2, Step 2.2: User Model & JWT Auth Helpers
+
+**Prompt:**
+> Create User Model with password hashing and JWT auth helper functions (token generation and verification). Write tests first following strict TDD.
+
+**Phase:** Phase 2 — Database Connection & User Authentication (Backend TDD)
+
+**Technical Objective:**
+- Create a `User` Mongoose model with `name`, `email`, `password`, `role` fields.
+- Implement bcrypt password hashing via a `pre('save')` hook.
+- Add `comparePassword` instance method for credential verification.
+- Enforce unique email constraint and role enum (`admin` | `user`) validation.
+- Create `generateToken(userId, role, expiresIn)` JWT helper.
+- Create `verifyToken(token)` that returns decoded payload or null.
+- Validate that missing `JWT_SECRET` throws a descriptive error.
+
+**TDD Cycle:**
+1. 🔴 RED — Wrote `user-model.test.ts` (8 tests) and `auth-helpers.test.ts` (6 tests). Tests failed with `Cannot find module '../models/User'` and `Cannot find module '../utils/auth'`.
+2. 🟢 GREEN — Implemented `models/User.ts` and `utils/auth.ts`. Fixed Mongoose 9 pre-save hook (async, no `next()`) and JWT `SignOptions` type casting. All 19 tests pass.
+3. 🔄 REFACTOR — Clean interfaces (`IUser`, `TokenPayload`), proper separation of concerns.
+
+**Files Modified:**
+- `backend/src/__tests__/user-model.test.ts` — [NEW] User model test suite (8 tests)
+- `backend/src/__tests__/auth-helpers.test.ts` — [NEW] JWT auth helpers test suite (6 tests)
+- `backend/src/models/User.ts` — [NEW] Mongoose User model with bcrypt hashing
+- `backend/src/utils/auth.ts` — [NEW] JWT generateToken/verifyToken helpers
