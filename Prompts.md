@@ -194,3 +194,31 @@
 - `backend/src/controllers/vehicleController.ts` — [NEW] Controller for vehicle logic
 - `backend/src/routes/vehicleRoutes.ts` — [NEW] Routes for vehicle API
 - `backend/src/app.ts` — [MODIFIED] Wired vehicle routes
+
+---
+
+## Phase 3, Step 3.3: Vehicle Search & Filtering
+
+**Prompt:**
+> Step 3.3 (TDD): Vehicle Search & Filtering
+> - `GET /api/vehicles/search`: Protected. Search parameters via query string: `make`, `model`, `category`, `minPrice`, `maxPrice`.
+> - Supports partial case-insensitive matching for make/model/category and price range filtering.
+> - Write comprehensive search integration tests.
+
+**Phase:** Phase 3 — Vehicle & Inventory Management (Backend TDD)
+
+**Technical Objective:**
+- Implement `GET /api/vehicles/search` with dynamic MongoDB queries.
+- Support `$regex` with `$options: 'i'` for string partial matches.
+- Support `$gte` and `$lte` for price ranges.
+- Validate the search is accessible to authenticated users only.
+
+**TDD Cycle:**
+1. 🔴 RED — Wrote `vehicle-search.test.ts` with 10 integration tests testing various combinations of query params. All failed with 404.
+2. 🟢 GREEN — Implemented `searchVehicles` controller, parsing query params and applying MongoDB filters. Mapped to `/api/vehicles/search`. All 10 tests pass.
+3. 🔄 REFACTOR — Kept controller clean with dynamic filter object construction.
+
+**Files Modified:**
+- `backend/src/__tests__/vehicle-search.test.ts` — [NEW] Vehicle search test suite (10 tests)
+- `backend/src/controllers/vehicleController.ts` — [MODIFIED] Added searchVehicles handler
+- `backend/src/routes/vehicleRoutes.ts` — [MODIFIED] Added GET /search route

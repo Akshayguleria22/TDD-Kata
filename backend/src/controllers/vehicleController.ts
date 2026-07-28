@@ -65,3 +65,48 @@ export const getVehicles = async (req: Request, res: Response): Promise<void> =>
     });
   }
 };
+
+/**
+ * GET /api/vehicles/search
+ * Search vehicles by make, model, category (partial matches) and minPrice/maxPrice
+ */
+export const searchVehicles = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { make, model, category, minPrice, maxPrice } = req.query;
+    
+    // Build filter object
+    const filter: any = {};
+
+    if (make) {
+      filter.make = { $regex: make as string, $options: 'i' };
+    }
+    if (model) {
+      filter.model = { $regex: model as string, $options: 'i' };
+    }
+    if (category) {
+      filter.category = { $regex: category as string, $options: 'i' };
+    }
+
+    if (minPrice || maxPrice) {
+      filter.price = {};
+      if (minPrice) {
+        filter.price.$gte = Number(minPrice);
+      }
+      if (maxPrice) {
+        filter.price.$lte = Number(maxPrice);
+      }
+    }
+
+    const vehicles = await Vehicle.find(filter);
+
+    res.status(200).json({
+      success: true,
+      data: vehicles,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+};
