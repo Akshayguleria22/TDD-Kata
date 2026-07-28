@@ -344,3 +344,37 @@
 - `frontend/vite.config.ts` — [MODIFIED] Added API proxy
 - `frontend/src/pages/Login.tsx` — [MODIFIED] Full implementation
 - `frontend/src/pages/Register.tsx` — [MODIFIED] Full implementation
+
+---
+
+## Phase 4, Steps 4.3 & 4.4: Dashboard, Search, and Purchase Flow
+
+**Prompt:**
+> Step 4.3: Dashboard & Search (Vehicle Catalog)
+> - Build a responsive Dashboard layout with a sticky Navbar showing the logged-in user's name and role.
+> - Implement a Search/Filter bar (Make, Model, Category, Price Range) that calls `GET /api/vehicles/search`.
+> - Build a reusable `VehicleCard` component to display vehicle details and a stock badge (e.g., Green for In Stock, Red for Out of Stock).
+>
+> Step 4.4: The Purchase Flow
+> - Add a "Purchase" button to the `VehicleCard`. 
+> - It must be `disabled` if `quantity === 0`.
+> - On click, call `POST /api/vehicles/:id/purchase`. If successful, show a success toast and instantly update the specific vehicle's stock in the UI without refreshing the whole page.
+
+**Phase:** Phase 4 — Frontend Implementation (React + Tailwind)
+
+**Technical Objective:**
+- Build a responsive layout with a `Navbar` component displaying the user state.
+- Create a `VehicleCard` component that handles its own purchase logic, disables on 0 stock, and updates its local state upon a successful API call.
+- Implement the `Dashboard` page to fetch `/api/vehicles/search` and pass dynamic filters as query parameters.
+- Provide optimistic or immediate UI updates upon successful purchase.
+
+**Execution Cycle:**
+1. Created `frontend/src/components/Navbar.tsx` with user state and conditional admin navigation.
+2. Created `frontend/src/components/VehicleCard.tsx` with a responsive design, dynamic stock badges, and a purchase handler that hits `/api/vehicles/:id/purchase`.
+3. Updated `frontend/src/pages/Dashboard.tsx` to include the search bar, manage filter states, and re-fetch from the API automatically when filters change using `useEffect` and `useCallback`.
+4. Handled purchase success by updating the `Dashboard`'s vehicle state array in place to reflect the new stock.
+
+**Files Modified:**
+- `frontend/src/components/Navbar.tsx` — [NEW] Top navigation bar
+- `frontend/src/components/VehicleCard.tsx` — [NEW] Individual vehicle display and purchase button
+- `frontend/src/pages/Dashboard.tsx` — [MODIFIED] Added search UI, grid layout, and API integration
