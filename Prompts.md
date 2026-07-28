@@ -378,3 +378,32 @@
 - `frontend/src/components/Navbar.tsx` — [NEW] Top navigation bar
 - `frontend/src/components/VehicleCard.tsx` — [NEW] Individual vehicle display and purchase button
 - `frontend/src/pages/Dashboard.tsx` — [MODIFIED] Added search UI, grid layout, and API integration
+
+---
+
+## Phase 4, Step 4.5: Admin Dashboard
+
+**Prompt:**
+> Step 4.5: Admin Dashboard
+> - Build a protected `/admin` route (redirect non-admins).
+> - Display a table view of all inventory.
+> - Implement forms/modals to **Add**, **Update**, and **Delete** vehicles.
+> - Add a "Restock" button/input for admins to call `POST /api/vehicles/:id/restock`.
+
+**Phase:** Phase 4 — Frontend Implementation (React + Tailwind)
+
+**Technical Objective:**
+- Secure the Admin route (completed in Step 4.1 via `ProtectedRoute adminOnly`).
+- Build a management table with all vehicles fetched from the backend.
+- Create an Add/Edit modal form that submits to `POST /api/vehicles` and `PUT /api/vehicles/:id`.
+- Handle deletion via `DELETE /api/vehicles/:id`.
+- Implement inline restock functionality that submits to `POST /api/vehicles/:id/restock`.
+
+**Execution Cycle:**
+1. Built a responsive table in `Admin.tsx` to list all inventory items and display stock health.
+2. Created an Add/Edit modal using conditional rendering, managing state with `currentVehicle`.
+3. Implemented a delete confirmation handler.
+4. Created an inline restock input field that toggles visible when the admin clicks the restock icon, and makes a targeted API update.
+
+**Files Modified:**
+- `frontend/src/pages/Admin.tsx` — [MODIFIED] Full implementation of admin features
