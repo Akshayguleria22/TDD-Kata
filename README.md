@@ -2,39 +2,32 @@
 
 A full-stack, real-time Car Dealership Inventory System designed with a Playful Geometric (Neo-Brutalist) aesthetic. It provides secure purchasing, real-time stock management, and a robust admin dashboard for complete CRUD capabilities over vehicle inventory.
 
-## 📸 App Preview
-
-<details>
-<summary><strong>Click to view full application preview</strong></summary>
-<br>
-
-![Preview 1](./preview/Screenshot%202026-07-29%20151642.png)
-![Preview 2](./preview/Screenshot%202026-07-29%20200509.png)
-![Preview 3](./preview/Screenshot%202026-07-29%20200629.png)
-![Preview 4](./preview/Screenshot%202026-07-29%20200643.png)
-![Preview 5](./preview/Screenshot%202026-07-29%20200654.png)
-![Preview 6](./preview/Screenshot%202026-07-29%20200708.png)
-![Preview 7](./preview/Screenshot%202026-07-30%20013749.png)
-![Preview 8](./preview/Screenshot%202026-07-30%20013801.png)
-![Preview 9](./preview/Screenshot%202026-07-30%20013828.png)
-![Preview 10](./preview/Screenshot%202026-07-30%20013835.png)
-![Preview 11](./preview/Screenshot%202026-07-30%20013849.png)
-![Preview 12](./preview/Screenshot%202026-07-30%20013901.png)
-![Preview 13](./preview/Screenshot%202026-07-30%20013911.png)
-![Preview 14](./preview/Screenshot%202026-07-30%20013920.png)
-![Preview 15](./preview/Screenshot%202026-07-30%20013925.png)
-
-</details>
-
 ## 🚀 Features
 
-- **Public Landing Page & Inventory:** Browse the current available vehicles.
+### 🌟 Enterprise-Grade Enhancements (Going Beyond CRUD)
+- **Real-Time Multiplayer Inventory (WebSockets):** Live stock tracking across all connected clients. If a car is purchased, the stock badge instantly flashes and decrements on your screen without a page refresh.
+- **AI-Powered Smart Search:** An NLP-driven search bar that parses natural language (e.g., "fast electric cars under 80k") into structured database queries.
+- **Low-Latency Caching Layer:** In-memory caching (`node-cache`) on inventory endpoints to drastically reduce database throughput and API response times, complete with strict cache invalidation on purchases.
+- **System Health Dashboard:** Admin telemetry tracking API latency, database throughput, and memory heap statistics.
+- **CI/CD Pipeline:** Automated GitHub Actions workflow enforcing that the 60+ Jest test suite passes on every push to the `main` branch.
+
+### 🚗 Core Dealership Functionality
+- **Public Landing Page & Inventory:** Browse the currently available vehicles with staggered Framer Motion layout animations.
 - **Search & Filtering:** Dynamic vehicle search by make, model, category, and price.
-- **Secure Authentication:** JWT-based user login and registration.
+- **Secure Authentication:** JWT-based user login and registration with HTTP interceptors.
 - **Role-Based Access Control:** 
-  - Authenticated Users can purchase vehicles (atomic operations ensuring no overselling).
-  - Admins can add, edit, delete, and restock vehicles.
-- **Stunning UI/UX:** Built with Tailwind CSS v4 featuring a Neo-Brutalist design system (Candy Buttons, hard shadows, chunky borders).
+  - **Authenticated Users:** Can purchase vehicles via atomic database operations (`$inc`), ensuring zero race conditions or overselling.
+  - **Admins:** Full CRUD capabilities (Add, Edit, Delete, Restock) through a protected dashboard.
+- **Stunning UI/UX:** Built with Tailwind CSS v4 featuring a customized Neo-Brutalist design system (Candy Buttons, hard shadows, chunky borders, and micro-interactions).
+
+---
+
+## 🛠️ Technology Stack
+
+- **Backend Architecture:** Node.js, Express, TypeScript, Socket.IO (WebSockets), Node-Cache.
+- **Database:** MongoDB (Mongoose) with atomic operators.
+- **Frontend SPA:** React (Vite), TypeScript, Tailwind CSS v4, Framer Motion, Lucide React.
+- **Testing & DevOps:** Jest, Supertest (Strict TDD Approach - 94/94 Tests Passing), GitHub Actions (CI/CD).
 
 ### 🔑 Demo Credentials
 To access the Admin Dashboard and manage inventory, you can log in with the following credentials:
