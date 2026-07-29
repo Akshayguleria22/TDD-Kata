@@ -2,6 +2,37 @@
 
 ---
 
+## Phase 1: Project Initialization & Basic Setup
+
+**Prompt:**
+> Let's start with Phase 1. Please initialize a new monorepo structure with a backend (Node.js, Express, TypeScript, Mongoose) and a frontend (React, Vite, Tailwind CSS, TypeScript). Install all the necessary dependencies for both, configure TypeScript, and set up the basic boilerplate including the Express server and Vite entry points.
+
+**Phase:** Phase 1 — Project Initialization
+
+**Technical Objective:**
+- Initialize Node.js backend with Express, TypeScript, and Mongoose.
+- Initialize React frontend with Vite, TypeScript, and Tailwind CSS.
+- Set up basic project folder structure (`/backend`, `/frontend`).
+- Configure `tsconfig.json` and basic server entry point (`server.ts`, `app.ts`).
+
+**Execution Cycle:**
+1. Created `backend` directory, ran `npm init`, and installed Express, Mongoose, TypeScript, and Jest.
+2. Created `backend/src/server.ts` and `backend/src/app.ts` as the basic Express server entry points.
+3. Created `frontend` directory using Vite React-TS template.
+4. Installed Tailwind CSS and configured `tailwind.config.js` / `@tailwindcss/vite`.
+5. Verified both applications run successfully on their respective ports.
+
+**Files Modified:**
+- `backend/package.json` — [NEW] Backend dependencies
+- `backend/tsconfig.json` — [NEW] TypeScript configuration
+- `backend/src/app.ts` — [NEW] Express app configuration
+- `backend/src/server.ts` — [NEW] Express server entry point
+- `frontend/package.json` — [NEW] Frontend dependencies
+- `frontend/vite.config.ts` — [NEW] Vite configuration
+- `frontend/src/index.css` — [NEW] Tailwind directives
+
+---
+
 ## Phase 2, Step 2.1: Database Connection Setup
 
 **Prompt:**
@@ -747,5 +778,37 @@
 
 **Files Created:**
 - `.github/workflows/main.yml` — [NEW] GitHub Actions pipeline configuration.
+
+---
+
+## Phase 5: CI/CD Pipeline & Dependency Bug Fixes
+
+**Prompt:**
+> frontend not working Dashboard.tsx:3 Uncaught SyntaxError: The requested module '/src/components/VehicleCard.tsx' does not provide an export named 'Vehicle' (at Dashboard.tsx:3:23)
+> in github ci/cd pipelines....backend test 18.x test failed but 20x passed ReferenceError: crypto is not defined
+
+**Phase:** Phase 5 — CI/CD Pipeline & Dependency Bug Fixes
+
+**Technical Objectives:**
+1. Fix Vite/esbuild frontend TypeScript import errors for the `Vehicle` interface (`type` modifier required).
+2. Fix backend MongoDB connection failure (`ECONNREFUSED` SRV DNS issue on Windows) by modifying `.env` to use the non-SRV standard connection string.
+3. Polyfill the Web Crypto API (`global.crypto.randomUUID`) in Jest for Node.js 18.x to fix the MongoDB driver crashing in CI/CD pipelines.
+
+**Execution Cycle:**
+1. Updated `frontend/src/pages/Dashboard.tsx`, `Admin.tsx`, and `ProtectedRoute.tsx` to use `import type { Vehicle }` and `import type { ReactNode }`.
+2. Added missing `CarFront` icon import in `Dashboard.tsx`.
+3. Overwrote `backend/.env` with the fully-resolved standard MongoDB connection string, bypassing the failing SRV DNS resolution.
+4. Created `backend/jest.setup.js` injecting Node's native `crypto` module into the global context for Jest.
+5. Updated `backend/jest.config.js` to include `setupFiles: ['<rootDir>/jest.setup.js']`.
+6. Verified backend `npm test` successfully completed with all 94 tests passing.
+
+**Files Modified:**
+- `frontend/src/pages/Dashboard.tsx` — [MODIFIED] Fixed TS type import and missing icon.
+- `frontend/src/pages/Admin.tsx` — [MODIFIED] Fixed TS type import.
+- `frontend/src/components/ProtectedRoute.tsx` — [MODIFIED] Fixed TS type import.
+- `frontend/src/context/AuthContext.tsx` — [MODIFIED] Fixed TS type import and removed unused `useEffect`.
+- `backend/.env` — [MODIFIED] Bypassed SRV resolution error.
+- `backend/jest.setup.js` — [NEW] Added global crypto polyfill.
+- `backend/jest.config.js` — [MODIFIED] Mapped the setup file.
 
 ---
