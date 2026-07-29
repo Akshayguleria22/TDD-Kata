@@ -677,3 +677,28 @@
 - `frontend/src/index.css` — [MODIFIED] Added stockFlash and fadeIn keyframes.
 
 ---
+
+## Phase 5: Enterprise Architecture
+
+**Prompt:**
+> You are a Staff Software Engineer. We are finalizing our Car Dealership System to be the #1 submission. We need to implement enterprise-grade architectural features that demonstrate mastery of system design, algorithmic optimization, and deployment pipelines.
+> Phase 5 - Enterprise Architecture (Step 1: Caching Layer for Low Latency)
+
+**Phase:** Phase 5 — Enterprise Architecture (Step 1)
+
+**Technical Objectives:**
+1. Install `node-cache` (lightweight Redis alternative).
+2. Implement caching on `GET /api/vehicles`.
+3. Implement cache invalidation: Clear cache whenever `POST /purchase`, `POST /restock`, `PUT`, or `DELETE` is called.
+
+**Execution Cycle:**
+1. Installed `node-cache` in the backend.
+2. Initialized a `NodeCache` instance with a 5-minute TTL (`stdTTL: 300`) in `vehicleController.ts`.
+3. Updated `getVehicles` to check the cache for the `"all_vehicles"` key before querying the database, returning the cached response if available.
+4. Added `cache.del("all_vehicles")` to all mutation endpoints (`createVehicle`, `updateVehicle`, `deleteVehicle`, `purchaseVehicle`, `restockVehicle`) to ensure strict consistency.
+
+**Files Modified:**
+- `backend/package.json` — [MODIFIED] Added `node-cache`.
+- `backend/src/controllers/vehicleController.ts` — [MODIFIED] Added caching logic and cache invalidation.
+
+---

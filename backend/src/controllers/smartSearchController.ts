@@ -136,6 +136,22 @@ export const smartSearch = async (req: Request, res: Response): Promise<void> =>
       if (parsed.minPrice) mongoFilter.price.$gte = parsed.minPrice;
       if (parsed.maxPrice) mongoFilter.price.$lte = parsed.maxPrice;
     }
+    
+    // If no specific structural filters were found (or even if they were),
+    // we can do a fallback keyword search against make, model, and description
+    // to make the AI search more forgiving for unknown brands like Mahindra.
+    if (Object.keys(mongoFilter).length === 0) {
+      const tokens = query.split(/\s+/).filter(t => t.length > 2);
+      if (tokens.length > 0) {
+        mongoFilter.$or = tokens.map(token => ({
+          $or: [
+            { make: { $regex: token, $options: 'i' } },
+            { model: { $regex: token, $options: 'i' } },
+            { description: { $regex: token, $options: 'i' } }
+          ]
+        }));
+      }
+    }
 
     const vehicles = await Vehicle.find(mongoFilter);
 

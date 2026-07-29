@@ -23,6 +23,7 @@ const Dashboard = () => {
   const [smartQuery, setSmartQuery] = useState('');
   const [smartLoading, setSmartLoading] = useState(false);
   const [parsedFilters, setParsedFilters] = useState<any>(null);
+  const [smartError, setSmartError] = useState('');
 
   const fetchVehicles = useCallback(async () => {
     setLoading(true);
@@ -54,13 +55,18 @@ const Dashboard = () => {
     if (!smartQuery.trim()) return;
     
     setSmartLoading(true);
+    setLoading(true);
     setParsedFilters(null);
+    setSmartError('');
     try {
       const response = await api.post('/vehicles/smart-search', { query: smartQuery });
       setVehicles(response.data.data);
       setParsedFilters(response.data.meta?.parsedFilters || null);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Smart search failed', error);
+      setSmartError(error.response?.data?.message || 'Smart search failed. Please try again.');
+      // Fallback: reload all vehicles
+      fetchVehicles();
     } finally {
       setSmartLoading(false);
       setLoading(false);
@@ -104,6 +110,7 @@ const Dashboard = () => {
     setMaxPrice('');
     setSmartQuery('');
     setParsedFilters(null);
+    setSmartError('');
   };
 
   const handlePurchaseSuccess = (updatedVehicle: Vehicle) => {
@@ -161,6 +168,11 @@ const Dashboard = () => {
                     {key}: {String(value)}
                   </span>
                 ))}
+              </div>
+            )}
+            {smartError && (
+              <div className="mt-3 bg-red-50 text-red-600 border-2 border-red-300 text-xs px-3 py-2 rounded-xl font-bold">
+                {smartError}
               </div>
             )}
           </div>

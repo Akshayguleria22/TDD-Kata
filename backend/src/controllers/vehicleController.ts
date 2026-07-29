@@ -2,6 +2,10 @@
 import { Request, Response } from 'express';
 import Vehicle from '../models/Vehicle';
 import { getIO } from '../socket';
+import NodeCache from 'node-cache';
+
+const cache = new NodeCache({ stdTTL: 300 }); // 5 minute TTL
+
 
 /**
  * POST /api/vehicles
@@ -34,6 +38,8 @@ export const createVehicle = async (req: Request, res: Response): Promise<void> 
       data: vehicle,
     });
     
+    cache.del("all_vehicles");
+
     // Emit real-time update
     try { getIO().emit('inventory_updated', vehicle); } catch (e) {}
   } catch (error: any) {
@@ -57,7 +63,19 @@ export const createVehicle = async (req: Request, res: Response): Promise<void> 
  */
 export const getVehicles = async (req: Request, res: Response): Promise<void> => {
   try {
+    const cachedVehicles = cache.get("all_vehicles");
+    if (cachedVehicles) {
+      res.status(200).json({
+        success: true,
+        data: cachedVehicles,
+      });
+      return;
+    }
+
     const vehicles = await Vehicle.find({});
+    
+    cache.set("all_vehicles", vehicles);
+
     res.status(200).json({
       success: true,
       data: vehicles,
@@ -141,6 +159,8 @@ export const updateVehicle = async (req: Request, res: Response): Promise<void> 
 
     res.status(200).json({ success: true, data: vehicle });
 
+    cache.del("all_vehicles");
+
     // Emit real-time update
     try { getIO().emit('inventory_updated', vehicle); } catch (e) {}
   } catch (error: any) {
@@ -170,6 +190,8 @@ export const deleteVehicle = async (req: Request, res: Response): Promise<void> 
     }
 
     res.status(200).json({ success: true, data: {} });
+
+    cache.del("all_vehicles");
 
     // Emit real-time update
     try { getIO().emit('inventory_deleted', id); } catch (e) {}
@@ -210,6 +232,8 @@ export const purchaseVehicle = async (req: Request, res: Response): Promise<void
     }
 
     res.status(200).json({ success: true, data: vehicle });
+
+    cache.del("all_vehicles");
 
     // Emit real-time update
     try { getIO().emit('inventory_updated', vehicle); } catch (e) {}
@@ -253,6 +277,8 @@ export const restockVehicle = async (req: Request, res: Response): Promise<void>
     }
 
     res.status(200).json({ success: true, data: vehicle });
+
+    cache.del("all_vehicles");
 
     // Emit real-time update
     try { getIO().emit('inventory_updated', vehicle); } catch (e) {}
