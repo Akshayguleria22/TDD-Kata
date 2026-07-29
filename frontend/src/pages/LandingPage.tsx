@@ -1,7 +1,10 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import VehicleCard, { Vehicle } from '../components/VehicleCard';
+import api from '../api/axios';
 import Navbar from '../components/Navbar';
-import { Zap, ShieldCheck, BarChart3, ArrowRight, CarFront, Sparkles } from 'lucide-react';
+import { Zap, ShieldCheck, BarChart3, ArrowRight, CarFront, Sparkles, Loader2 } from 'lucide-react';
 
 const features = [
   {
@@ -26,6 +29,26 @@ const features = [
 
 const LandingPage = () => {
   const { isAuthenticated } = useAuth();
+  const [latestVehicle, setLatestVehicle] = useState<Vehicle | null>(null);
+  const [loadingVehicle, setLoadingVehicle] = useState(true);
+
+  useEffect(() => {
+    const fetchLatest = async () => {
+      try {
+        const res = await api.get('/vehicles');
+        const vehicles = res.data.data;
+        if (vehicles && vehicles.length > 0) {
+          // Render the last one as the most recent
+          setLatestVehicle(vehicles[vehicles.length - 1]);
+        }
+      } catch (err) {
+        console.error('Failed to fetch latest vehicle', err);
+      } finally {
+        setLoadingVehicle(false);
+      }
+    };
+    fetchLatest();
+  }, []);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -101,41 +124,23 @@ const LandingPage = () => {
 
             {/* Right: Hero visual card */}
             <div className="hidden lg:flex justify-center">
-              <div className="relative">
-                {/* Main card */}
-                <div className="bg-white border-2 border-foreground rounded-2xl shadow-[12px_12px_0px_0px_#1E293B] p-8 w-[380px] rotate-[-2deg]">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 bg-accent rounded-full border-2 border-foreground flex items-center justify-center">
-                      <CarFront size={24} strokeWidth={2.5} className="text-white" />
-                    </div>
-                    <div>
-                      <div className="font-heading font-extrabold text-lg">2024 Tesla Model S</div>
-                      <div className="text-foreground/50 text-sm font-body">Electric Sedan</div>
-                    </div>
+              <div className="relative w-[380px]">
+                {loadingVehicle ? (
+                  <div className="bg-white border-2 border-foreground rounded-2xl shadow-[12px_12px_0px_0px_#1E293B] p-8 w-[380px] h-64 flex items-center justify-center rotate-[-2deg]">
+                    <Loader2 className="animate-spin text-accent" size={32} />
                   </div>
-                  
-                  <div className="space-y-3 mb-6">
-                    <div className="flex justify-between items-center py-2 border-b-2 border-border">
-                      <span className="text-foreground/60 font-body text-sm">Price</span>
-                      <span className="font-heading font-bold text-accent text-lg">$79,990</span>
-                    </div>
-                    <div className="flex justify-between items-center py-2 border-b-2 border-border">
-                      <span className="text-foreground/60 font-body text-sm">Stock</span>
-                      <span className="inline-flex items-center gap-1.5 text-green-600 font-bold text-sm">
-                        <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                        12 Available
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-2">
-                      <span className="text-foreground/60 font-body text-sm">Category</span>
-                      <span className="bg-tertiary/20 border-2 border-foreground rounded-full text-xs font-bold px-3 py-0.5">Electric</span>
-                    </div>
+                ) : latestVehicle ? (
+                  <div className="rotate-[-2deg] origin-center z-10 relative">
+                    <VehicleCard 
+                      vehicle={latestVehicle} 
+                      onPurchaseSuccess={(updatedVehicle) => setLatestVehicle(updatedVehicle)} 
+                    />
                   </div>
-
-                  <button className="w-full bg-accent text-white font-bold border-2 border-foreground rounded-full py-3 shadow-pop transition-all duration-200 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-pop-hover active:translate-y-0.5 active:translate-x-0.5 active:shadow-pop-active">
-                    Purchase Now
-                  </button>
-                </div>
+                ) : (
+                  <div className="bg-white border-2 border-foreground rounded-2xl shadow-[12px_12px_0px_0px_#1E293B] p-8 w-[380px] h-64 flex items-center justify-center rotate-[-2deg]">
+                    <p className="font-bold text-foreground/50">No vehicles available.</p>
+                  </div>
+                )}
 
                 {/* Decorative stacked card behind */}
                 <div className="absolute -z-10 top-4 left-4 w-[380px] h-full bg-secondary/20 border-2 border-foreground rounded-2xl rotate-[2deg]" />

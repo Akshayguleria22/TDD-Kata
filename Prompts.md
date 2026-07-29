@@ -588,3 +588,27 @@
 - `frontend/src/pages/Dashboard.tsx`, `frontend/src/pages/Admin.tsx` — [MODIFIED] Socket listeners and optimistic UI.
 
 ---
+
+## Phase 4.8: The "Hire Me" Features (Step 1)
+
+**Prompt:**
+> You are an award-winning Principal UI/UX Engineer. We need to elevate this application to be the absolute #1 submission out of 150 candidates. The design is great, but we need to replace static elements with dynamic, high-engineering features. 
+> ... Please begin immediately with Step 1: Fix the Landing Page Data.
+
+**Phase:** Phase 4.8 — The "Hire Me" Features (Step 1)
+
+**Technical Objective:**
+- Remove the hardcoded dummy vehicle card on the Landing Page.
+- Fetch the most recently added vehicle from the `GET /api/vehicles` endpoint and pass it to a real `VehicleCard` component on the Landing Page.
+- Ensure the "Purchase Now" button on the Landing Page is fully functional and triggers the atomic purchase API.
+
+**Execution Cycle:**
+1. Modified `LandingPage.tsx` to include `useEffect` and fetch the vehicle list on component mount.
+2. Extracted the last vehicle from the response payload and set it into state (`latestVehicle`).
+3. Replaced the static HTML markup on the right side of the hero section with a true `<VehicleCard />` instance.
+4. Bound the purchase action so clicking "Purchase" from the landing page uses the active authentication state, buys the vehicle, triggers confetti, and updates the local stock instantly.
+
+**Files Modified:**
+- `frontend/src/pages/LandingPage.tsx` — [MODIFIED] Replaced static dummy data with dynamic API data.
+
+---
