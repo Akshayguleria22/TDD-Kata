@@ -6,7 +6,7 @@ import type { Vehicle } from '../components/VehicleCard';
 import api from '../api/axios';
 import Navbar from '../components/Navbar';
 import LiveActivityTicker from '../components/LiveActivityTicker';
-import { Zap, ShieldCheck, BarChart3, ArrowRight, CarFront, Sparkles, Loader2 } from 'lucide-react';
+import { Zap, ShieldCheck, BarChart3, ArrowRight, Sparkles, Loader2 } from 'lucide-react';
 
 const features = [
   {

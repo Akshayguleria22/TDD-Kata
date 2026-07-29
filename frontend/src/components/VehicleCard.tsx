@@ -23,7 +23,7 @@ interface VehicleCardProps {
   flash?: boolean; // triggers a CSS pulse when stock changes via WebSocket
 }
 
-const VehicleCard = ({ vehicle, onPurchaseSuccess, flash }: VehicleCardProps) => {
+const VehicleCard = ({ vehicle, onPurchaseSuccess }: VehicleCardProps) => {
   const [purchasing, setPurchasing] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');

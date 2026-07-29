@@ -16,7 +16,8 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     // The backend is proxied to /api, but socket.io connects to the root url or we can just connect to the host.
     // Using the same origin by default (Vite proxy doesn't auto proxy ws unless configured, but we'll connect directly to 5000 for local dev if needed, or just let socket.io figure it out).
     // Let's connect to the backend URL explicitly or rely on proxy.
-    const newSocket = io(window.location.hostname === 'localhost' ? 'http://localhost:5000' : '/');
+    const socketUrl = import.meta.env.VITE_BACKEND_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000' : '/');
+    const newSocket = io(socketUrl);
 
     newSocket.on('connect', () => {
       setIsConnected(true);
