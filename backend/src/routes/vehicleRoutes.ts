@@ -9,6 +9,7 @@ import {
   purchaseVehicle,
   restockVehicle
 } from '../controllers/vehicleController';
+import { smartSearch } from '../controllers/smartSearchController';
 import { authMiddleware, adminOnlyMiddleware } from '../middleware/authMiddleware';
 
 const router = Router();
@@ -17,6 +18,7 @@ const router = Router();
 router.use(authMiddleware);
 
 router.post('/', adminOnlyMiddleware, createVehicle);
+router.post('/smart-search', smartSearch);
 router.get('/search', searchVehicles);
 router.get('/', getVehicles);
 

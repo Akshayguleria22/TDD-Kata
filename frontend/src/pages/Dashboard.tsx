@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar';
 import VehicleCard, { type Vehicle } from '../components/VehicleCard';
 import VehicleCardSkeleton from '../components/VehicleCardSkeleton';
 import api from '../api/axios';
-import { Search, Loader2, FilterX, CarFront } from 'lucide-react';
+import { Search, Loader2, FilterX, CarFront, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocket } from '../context/SocketContext';
 
@@ -18,6 +18,11 @@ const Dashboard = () => {
   const [category, setCategory] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
+
+  // AI Smart Search state
+  const [smartQuery, setSmartQuery] = useState('');
+  const [smartLoading, setSmartLoading] = useState(false);
+  const [parsedFilters, setParsedFilters] = useState<any>(null);
 
   const fetchVehicles = useCallback(async () => {
     setLoading(true);
@@ -42,6 +47,25 @@ const Dashboard = () => {
   useEffect(() => {
     fetchVehicles();
   }, [fetchVehicles]);
+
+  // AI Smart Search handler
+  const handleSmartSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!smartQuery.trim()) return;
+    
+    setSmartLoading(true);
+    setParsedFilters(null);
+    try {
+      const response = await api.post('/vehicles/smart-search', { query: smartQuery });
+      setVehicles(response.data.data);
+      setParsedFilters(response.data.meta?.parsedFilters || null);
+    } catch (error) {
+      console.error('Smart search failed', error);
+    } finally {
+      setSmartLoading(false);
+      setLoading(false);
+    }
+  };
 
   // Real-time socket listeners
   useEffect(() => {
@@ -78,6 +102,8 @@ const Dashboard = () => {
     setCategory('');
     setMinPrice('');
     setMaxPrice('');
+    setSmartQuery('');
+    setParsedFilters(null);
   };
 
   const handlePurchaseSuccess = (updatedVehicle: Vehicle) => {
@@ -89,7 +115,7 @@ const Dashboard = () => {
     // In a real app, we might use react-hot-toast for a global success message here
   };
 
-  const hasFilters = make || model || category || minPrice || maxPrice;
+  const hasFilters = make || model || category || minPrice || maxPrice || smartQuery;
 
   const inputClasses = "w-full text-sm bg-white border-2 border-slate-300 rounded-xl px-3 py-2.5 font-body transition-all outline-none focus:border-accent focus:shadow-[4px_4px_0px_0px_#8B5CF6]";
 
@@ -103,6 +129,42 @@ const Dashboard = () => {
           <h1 className="text-4xl font-heading font-extrabold text-foreground">Vehicle Inventory</h1>
           <p className="text-foreground/50 mt-2 font-body font-medium">Browse and purchase vehicles from our catalog.</p>
         </div>
+
+        {/* ── AI Smart Search ── */}
+        <form onSubmit={handleSmartSearch} className="mb-4">
+          <div className="bg-gradient-to-r from-accent/5 via-secondary/5 to-tertiary/5 border-2 border-accent rounded-2xl shadow-pop-accent p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-accent rounded-full border-2 border-foreground flex items-center justify-center shrink-0">
+                <Sparkles size={18} strokeWidth={2.5} className="text-white" />
+              </div>
+              <input
+                type="text"
+                value={smartQuery}
+                onChange={e => setSmartQuery(e.target.value)}
+                placeholder="Ask our AI... e.g. 'Show me fast electric cars under $80k'"
+                className="flex-1 text-sm bg-white border-2 border-accent/30 rounded-xl px-4 py-3 font-body transition-all outline-none focus:border-accent focus:shadow-[4px_4px_0px_0px_#8B5CF6] placeholder:text-foreground/30"
+              />
+              <button
+                type="submit"
+                disabled={smartLoading || !smartQuery.trim()}
+                className="bg-accent text-white font-bold border-2 border-foreground rounded-full px-6 py-2.5 shadow-pop transition-all duration-200 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-pop-hover active:translate-y-0.5 active:translate-x-0.5 active:shadow-pop-active disabled:opacity-50 flex items-center gap-2 whitespace-nowrap"
+              >
+                {smartLoading ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
+                AI Search
+              </button>
+            </div>
+            {parsedFilters && Object.keys(parsedFilters).length > 0 && (
+              <div className="mt-3 flex items-center gap-2 flex-wrap">
+                <span className="text-xs font-bold text-foreground/40 uppercase tracking-wider">AI Parsed:</span>
+                {Object.entries(parsedFilters).map(([key, value]) => (
+                  <span key={key} className="inline-flex items-center gap-1 bg-accent/10 text-accent border border-accent/30 rounded-full text-xs font-bold px-3 py-1">
+                    {key}: {String(value)}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </form>
 
         {/* Search & Filter Bar — Sticker Card */}
         <div className="bg-white p-6 border-2 border-foreground rounded-2xl shadow-pop mb-8">

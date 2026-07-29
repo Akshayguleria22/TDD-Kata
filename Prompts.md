@@ -637,3 +637,43 @@
 - `frontend/src/pages/LandingPage.tsx` — [MODIFIED] Fixed types and added dynamic ticker.
 
 ---
+
+## Phase 4.9: Elite Engineering Features
+
+**Prompt:**
+> You are a Principal Full-Stack Engineer and AI Architect. Our goal is to make this Car Dealership Inventory System the absolute best submission out of 150 candidates. We are moving beyond basic CRUD and adding elite, production-grade features.
+
+**Phase:** Phase 4.9 — Elite Engineering Features (All 4 Steps)
+
+**Technical Objectives:**
+1. Enhance WebSocket stock badge with CSS flash animation when quantity changes live.
+2. Build an AI-Powered NLP Smart Search engine (`POST /api/vehicles/smart-search`) that parses natural language into structured MongoDB queries.
+3. Build a System Health & Architecture Dashboard (`GET /api/health/metrics`) with API latency tracking, DB ping, memory gauges, and collection stats.
+4. (Already completed in Phase 4.7) Framer Motion layout animations with `AnimatePresence`.
+
+**Execution Cycle:**
+1. Added `useRef`-based quantity change detection to `VehicleCard.tsx` — when `vehicle.quantity` changes (via WebSocket), the stock badge pulses with a `stockFlash` CSS animation and the dot pings.
+2. Created `smartSearchController.ts` with a lightweight NLP parser that extracts `make`, `category`, `year`, `minPrice`, `maxPrice` from natural language strings using regex and keyword dictionaries.
+3. Added `POST /api/vehicles/smart-search` route to `vehicleRoutes.ts`.
+4. Built the AI Smart Search UI on `Dashboard.tsx` with a sparkle icon, gradient border, and "AI Parsed" filter pill display.
+5. Created `healthController.ts` with real DB ping, API latency percentile tracking (avg/p95/max), Node.js heap stats, system RAM, and collection counts.
+6. Created `healthRoutes.ts` (admin-only) and registered it in `app.ts`.
+7. Added a global API latency tracking middleware in `app.ts` that measures every request's response time.
+8. Created `SystemHealth.tsx` frontend component with live-polling (10s), CSS progress bars, color-coded latency indicators, and collection stats.
+9. Added a tabbed interface to `Admin.tsx` with "Inventory" and "System Health" tabs.
+
+**Files Created:**
+- `backend/src/controllers/smartSearchController.ts` — [NEW] NLP search engine.
+- `backend/src/controllers/healthController.ts` — [NEW] System metrics endpoint.
+- `backend/src/routes/healthRoutes.ts` — [NEW] Admin-only health routes.
+- `frontend/src/components/SystemHealth.tsx` — [NEW] Health dashboard UI.
+
+**Files Modified:**
+- `backend/src/app.ts` — [MODIFIED] Added health routes and latency middleware.
+- `backend/src/routes/vehicleRoutes.ts` — [MODIFIED] Added smart-search route.
+- `frontend/src/components/VehicleCard.tsx` — [MODIFIED] Flash animation on live stock changes.
+- `frontend/src/pages/Dashboard.tsx` — [MODIFIED] Added AI Smart Search bar.
+- `frontend/src/pages/Admin.tsx` — [MODIFIED] Added tabbed interface with System Health tab.
+- `frontend/src/index.css` — [MODIFIED] Added stockFlash and fadeIn keyframes.
+
+---

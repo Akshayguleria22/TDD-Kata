@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ShoppingCart, Loader2, Info, Tag, CheckCircle2 } from 'lucide-react';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
@@ -20,9 +20,10 @@ export interface Vehicle {
 interface VehicleCardProps {
   vehicle: Vehicle;
   onPurchaseSuccess: (updatedVehicle: Vehicle) => void;
+  flash?: boolean; // triggers a CSS pulse when stock changes via WebSocket
 }
 
-const VehicleCard = ({ vehicle, onPurchaseSuccess }: VehicleCardProps) => {
+const VehicleCard = ({ vehicle, onPurchaseSuccess, flash }: VehicleCardProps) => {
   const [purchasing, setPurchasing] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -30,6 +31,19 @@ const VehicleCard = ({ vehicle, onPurchaseSuccess }: VehicleCardProps) => {
   const navigate = useNavigate();
   const { width, height } = useWindowSize();
   const [showConfetti, setShowConfetti] = useState(false);
+
+  // Flash animation state: pulses the stock badge when quantity changes via WebSocket
+  const [isFlashing, setIsFlashing] = useState(false);
+  const prevQuantityRef = useRef(vehicle.quantity);
+
+  useEffect(() => {
+    if (vehicle.quantity !== prevQuantityRef.current) {
+      setIsFlashing(true);
+      prevQuantityRef.current = vehicle.quantity;
+      const timer = setTimeout(() => setIsFlashing(false), 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [vehicle.quantity]);
 
   const handlePurchase = async () => {
     if (!isAuthenticated) {
@@ -100,8 +114,8 @@ const VehicleCard = ({ vehicle, onPurchaseSuccess }: VehicleCardProps) => {
       {/* Card Footer */}
       <div className="bg-background p-4 border-t-2 border-foreground flex items-center justify-between">
         <div className="flex items-center">
-          <span className={`inline-flex items-center gap-1.5 text-sm font-bold ${inStock ? 'text-green-600' : 'text-red-500'}`}>
-            <span className={`w-2.5 h-2.5 rounded-full border-2 ${inStock ? 'bg-green-400 border-green-600' : 'bg-red-400 border-red-600'}`}></span>
+          <span className={`inline-flex items-center gap-1.5 text-sm font-bold transition-all duration-300 ${inStock ? 'text-green-600' : 'text-red-500'} ${isFlashing ? 'animate-[stockFlash_0.6s_ease-in-out_2] scale-110' : ''}`}>
+            <span className={`w-2.5 h-2.5 rounded-full border-2 ${inStock ? 'bg-green-400 border-green-600' : 'bg-red-400 border-red-600'} ${isFlashing ? 'animate-ping' : ''}`}></span>
             {inStock ? `${vehicle.quantity} In Stock` : 'Out of Stock'}
           </span>
         </div>

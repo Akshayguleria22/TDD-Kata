@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import api from '../api/axios';
 import type { Vehicle } from '../components/VehicleCard';
-import { Plus, Edit2, Trash2, PackagePlus, X, Loader2 } from 'lucide-react';
+import { Plus, Edit2, Trash2, PackagePlus, X, Loader2, Activity, Car } from 'lucide-react';
 import { useSocket } from '../context/SocketContext';
+import SystemHealth from '../components/SystemHealth';
 
 const Admin = () => {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
   const { socket } = useSocket();
+  const [activeTab, setActiveTab] = useState<'inventory' | 'health'>('inventory');
   
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -133,20 +135,53 @@ const Admin = () => {
       <Navbar />
       
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-4">
           <div>
             <h1 className="text-4xl font-heading font-extrabold text-foreground">Admin Dashboard</h1>
             <p className="text-foreground/50 mt-2 font-body font-medium">Manage inventory, prices, and stock levels</p>
           </div>
           
-          <button 
-            onClick={openAddModal}
-            className="bg-accent text-white font-bold border-2 border-foreground px-5 py-2.5 rounded-full flex items-center gap-2 shadow-pop transition-all duration-200 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-pop-hover active:translate-y-0.5 active:translate-x-0.5 active:shadow-pop-active"
+          {activeTab === 'inventory' && (
+            <button 
+              onClick={openAddModal}
+              className="bg-accent text-white font-bold border-2 border-foreground px-5 py-2.5 rounded-full flex items-center gap-2 shadow-pop transition-all duration-200 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-pop-hover active:translate-y-0.5 active:translate-x-0.5 active:shadow-pop-active"
+            >
+              <Plus size={20} strokeWidth={2.5} />
+              Add Vehicle
+            </button>
+          )}
+        </div>
+
+        {/* Tab Switcher */}
+        <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => setActiveTab('inventory')}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold border-2 border-foreground text-sm transition-all duration-200 ${
+              activeTab === 'inventory'
+                ? 'bg-accent text-white shadow-pop'
+                : 'bg-white text-foreground shadow-[2px_2px_0px_0px_#1E293B] hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#1E293B]'
+            }`}
           >
-            <Plus size={20} strokeWidth={2.5} />
-            Add Vehicle
+            <Car size={16} strokeWidth={2.5} />
+            Inventory
+          </button>
+          <button
+            onClick={() => setActiveTab('health')}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold border-2 border-foreground text-sm transition-all duration-200 ${
+              activeTab === 'health'
+                ? 'bg-accent text-white shadow-pop'
+                : 'bg-white text-foreground shadow-[2px_2px_0px_0px_#1E293B] hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_#1E293B]'
+            }`}
+          >
+            <Activity size={16} strokeWidth={2.5} />
+            System Health
           </button>
         </div>
+
+        {activeTab === 'health' ? (
+          <SystemHealth />
+        ) : (
+          <>
 
         {/* Inventory Table — Sticker Card */}
         <div className="bg-white border-2 border-foreground rounded-2xl shadow-pop overflow-hidden">
@@ -251,6 +286,8 @@ const Admin = () => {
             </table>
           </div>
         </div>
+          </>
+        )}
       </main>
 
       {/* Add/Edit Modal */}
