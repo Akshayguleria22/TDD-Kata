@@ -24,8 +24,6 @@ const features = [
   },
 ];
 
-import Marquee from 'react-fast-marquee';
-
 const LandingPage = () => {
   const { isAuthenticated } = useAuth();
 
@@ -34,17 +32,24 @@ const LandingPage = () => {
       <Navbar />
 
       {/* ══════════════ MARQUEE ══════════════ */}
-      <div className="bg-accent text-white font-heading font-extrabold border-b-2 border-foreground py-2 text-sm tracking-widest uppercase">
-        <Marquee speed={40} gradient={false} autoFill>
-          <span className="mx-4">🔥 HOT DEALS</span>
-          <span className="mx-4">•</span>
-          <span className="mx-4">REAL-TIME STOCK</span>
-          <span className="mx-4">•</span>
-          <span className="mx-4">SECURE PURCHASING</span>
-          <span className="mx-4">•</span>
-          <span className="mx-4">100% TDD TESTED</span>
-          <span className="mx-4">•</span>
-        </Marquee>
+      <div className="bg-accent text-white font-heading font-extrabold border-b-2 border-foreground py-2 text-sm tracking-widest uppercase overflow-hidden flex whitespace-nowrap">
+        <div className="flex animate-[marquee_20s_linear_infinite]">
+          {/* Group 1 */}
+          <span className="mx-4">🔥 HOT DEALS</span><span className="mx-4">•</span>
+          <span className="mx-4">REAL-TIME STOCK</span><span className="mx-4">•</span>
+          <span className="mx-4">SECURE PURCHASING</span><span className="mx-4">•</span>
+          <span className="mx-4">100% TDD TESTED</span><span className="mx-4">•</span>
+          {/* Group 2 */}
+          <span className="mx-4">🔥 HOT DEALS</span><span className="mx-4">•</span>
+          <span className="mx-4">REAL-TIME STOCK</span><span className="mx-4">•</span>
+          <span className="mx-4">SECURE PURCHASING</span><span className="mx-4">•</span>
+          <span className="mx-4">100% TDD TESTED</span><span className="mx-4">•</span>
+          {/* Group 3 */}
+          <span className="mx-4">🔥 HOT DEALS</span><span className="mx-4">•</span>
+          <span className="mx-4">REAL-TIME STOCK</span><span className="mx-4">•</span>
+          <span className="mx-4">SECURE PURCHASING</span><span className="mx-4">•</span>
+          <span className="mx-4">100% TDD TESTED</span><span className="mx-4">•</span>
+        </div>
       </div>
 
       {/* ══════════════ HERO SECTION ══════════════ */}

@@ -12,6 +12,11 @@ A full-stack, real-time Car Dealership Inventory System designed with a Playful 
   - Admins can add, edit, delete, and restock vehicles.
 - **Stunning UI/UX:** Built with Tailwind CSS v4 featuring a Neo-Brutalist design system (Candy Buttons, hard shadows, chunky borders).
 
+### 🔑 Demo Credentials
+To access the Admin Dashboard and manage inventory, you can log in with the following credentials:
+- **Email:** `admin@example.com`
+- **Password:** `admin123`
+
 ## 🛠️ Technology Stack
 
 - **Backend:** Node.js, Express, TypeScript

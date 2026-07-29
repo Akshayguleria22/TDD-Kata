@@ -51,3 +51,13 @@ body {
   background-image: radial-gradient(circle, #E2E8F0 1.5px, transparent 1.5px);
   background-size: 24px 24px;
 }
+
+/* ---- Animations ---- */
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-33.33%); }
+}
