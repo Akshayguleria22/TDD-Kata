@@ -463,3 +463,42 @@
 - `frontend/src/pages/Admin.tsx` — [MODIFIED] Sticker table, chunky action buttons, sticker modal
 
 ---
+
+## Phase 4.6: Feature Completion — Landing Page, Routing & Navigation
+
+**Prompt:**
+> Finalize the UI to meet all JD requirements. Add a public Landing Page, restructure routing (/ = landing, /inventory = vehicle browsing, /admin = CRUD dashboard), make the Navbar dynamic based on auth state, and add purchase success/error toasts to VehicleCard.
+
+**Phase:** Phase 4.6 — Feature Completion
+
+**Technical Objective:**
+- Create a premium public Landing Page with hero section, features grid, tech stack strip, and footer.
+- Restructure routing: `/` = LandingPage (public), `/inventory` = Dashboard (public), `/admin` = Admin (protected).
+- Make Navbar dynamic: unauthenticated shows Home/Inventory/Login/Register; authenticated shows Home/Inventory/Logout; admin adds Admin Panel.
+- Add success toast to VehicleCard on purchase, login redirect for unauthenticated users.
+- Update Login/Register to redirect to `/inventory` after auth.
+
+**Execution Cycle:**
+1. **Step 1 (Landing Page):** Created `LandingPage.tsx` with hero (massive heading, floating decorative shapes, preview vehicle card, dual CTAs), features section (3-column grid with colored icon circles), tech stack pill strip, and dark footer.
+2. **Step 2 (Admin Dashboard):** Already fully implemented in Phase 4, Step 4.5 — includes table, Add/Edit modal, Delete with confirm, inline Restock.
+3. **Step 3 (Inventory Polish):** Added success toast (green) and error toast (red) to VehicleCard. Added auth-aware purchase button ("Purchase" vs "Login to Buy"). Unauthenticated clicks redirect to `/login`.
+4. **Step 4 (Navigation):** Rewrote Navbar with dynamic links based on auth state, active route highlighting, Login/Register candy buttons for guests, and circular logout button for authenticated users.
+
+**Routing Changes:**
+| Route | Before | After |
+|-------|--------|-------|
+| `/` | Protected Dashboard | Public Landing Page |
+| `/inventory` | _(didn't exist)_ | Public Dashboard (vehicle browsing) |
+| `/login` | Redirected to `/` on auth | Redirects to `/inventory` on auth |
+| `/register` | Redirected to `/` on auth | Redirects to `/inventory` on auth |
+| `/admin` | Protected Admin | Protected Admin (unchanged) |
+
+**Files Modified:**
+- `frontend/src/pages/LandingPage.tsx` — [NEW] Public landing page with hero, features, tech stack, footer
+- `frontend/src/App.tsx` — [MODIFIED] New route structure with LandingPage at /
+- `frontend/src/components/Navbar.tsx` — [MODIFIED] Dynamic auth-aware navigation
+- `frontend/src/components/VehicleCard.tsx` — [MODIFIED] Success toast, auth-aware purchase button
+- `frontend/src/pages/Login.tsx` — [MODIFIED] Redirect to /inventory after login
+- `frontend/src/pages/Register.tsx` — [MODIFIED] Redirect to /inventory after registration
+
+---

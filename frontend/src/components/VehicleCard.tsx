@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { ShoppingCart, Loader2, Info, Tag } from 'lucide-react';
+import { ShoppingCart, Loader2, Info, Tag, CheckCircle2 } from 'lucide-react';
 import api from '../api/axios';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export interface Vehicle {
   _id: string;
@@ -21,16 +23,26 @@ interface VehicleCardProps {
 const VehicleCard = ({ vehicle, onPurchaseSuccess }: VehicleCardProps) => {
   const [purchasing, setPurchasing] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const handlePurchase = async () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
     if (vehicle.quantity === 0) return;
     
     setError('');
+    setSuccess('');
     setPurchasing(true);
     
     try {
       const response = await api.post(`/vehicles/${vehicle._id}/purchase`);
       onPurchaseSuccess(response.data.data);
+      setSuccess('Purchase successful! 🎉');
+      setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to purchase vehicle.');
       setTimeout(() => setError(''), 3000);
@@ -92,13 +104,21 @@ const VehicleCard = ({ vehicle, onPurchaseSuccess }: VehicleCardProps) => {
           ) : (
             <ShoppingCart size={16} strokeWidth={2.5} />
           )}
-          Purchase
+          {isAuthenticated ? 'Purchase' : 'Login to Buy'}
         </button>
       </div>
 
+      {/* Success Toast */}
+      {success && (
+        <div className="absolute top-3 right-3 left-3 bg-green-50 text-green-700 border-2 border-green-400 text-xs px-3 py-2 rounded-xl shadow-pop font-bold flex items-center gap-2 animate-[fadeIn_0.2s_ease-out]">
+          <CheckCircle2 size={14} strokeWidth={2.5} />
+          {success}
+        </div>
+      )}
+
       {/* Error Toast */}
       {error && (
-        <div className="absolute top-3 right-3 left-3 bg-red-50 text-red-600 border-2 border-red-300 text-xs px-3 py-2 rounded-xl shadow-pop font-bold flex items-center gap-2">
+        <div className="absolute top-3 right-3 left-3 bg-red-50 text-red-600 border-2 border-red-300 text-xs px-3 py-2 rounded-xl shadow-pop font-bold flex items-center gap-2 animate-[fadeIn_0.2s_ease-out]">
           <Info size={14} strokeWidth={2.5} />
           {error}
         </div>

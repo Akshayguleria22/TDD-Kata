@@ -24,7 +24,7 @@ const Register = () => {
       const { token, user } = response.data.data;
       
       login(token, user);
-      navigate('/');
+      navigate('/inventory');
     } catch (err: any) {
       setError(
         err.response?.data?.message || 'An error occurred during registration.'

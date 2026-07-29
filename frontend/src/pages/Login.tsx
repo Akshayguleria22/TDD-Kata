@@ -23,7 +23,7 @@ const Login = () => {
       const { token, user } = response.data.data;
       
       login(token, user);
-      navigate('/');
+      navigate('/inventory');
     } catch (err: any) {
       setError(
         err.response?.data?.message || 'An error occurred during login. Please try again.'
