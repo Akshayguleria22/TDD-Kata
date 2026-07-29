@@ -12,38 +12,38 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <nav className="sticky top-0 z-50 bg-white border-b-2 border-foreground">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link to="/" className="flex flex-shrink-0 items-center text-blue-600 font-bold text-xl gap-2">
-              <CarFront size={28} />
+            <Link to="/" className="flex flex-shrink-0 items-center text-accent font-heading font-extrabold text-2xl gap-2 hover:text-secondary transition-colors">
+              <CarFront size={30} strokeWidth={2.5} />
               AutoInventory
             </Link>
           </div>
           
-          <div className="flex items-center gap-4">
-            <div className="text-sm">
-              <span className="text-gray-500">Welcome, </span>
-              <span className="font-medium text-gray-900">{user?.name}</span>
+          <div className="flex items-center gap-3">
+            <div className="text-sm font-body">
+              <span className="text-foreground/50 font-medium">Welcome, </span>
+              <span className="font-bold text-foreground">{user?.name}</span>
             </div>
             
             {isAdmin && (
               <Link 
                 to="/admin" 
-                className="flex items-center gap-1 bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1.5 rounded-md text-sm font-medium transition"
+                className="flex items-center gap-1.5 bg-secondary text-white border-2 border-foreground px-4 py-1.5 rounded-full text-sm font-bold shadow-pop transition-all duration-200 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-pop-hover active:translate-y-0.5 active:translate-x-0.5 active:shadow-pop-active"
               >
-                <ShieldCheck size={16} />
+                <ShieldCheck size={16} strokeWidth={2.5} />
                 Admin
               </Link>
             )}
             
             <button 
               onClick={handleLogout}
-              className="flex items-center gap-1 text-gray-500 hover:text-red-600 transition"
+              className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-foreground bg-white text-foreground shadow-pop transition-all duration-200 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-pop-hover hover:text-red-500 active:translate-y-0.5 active:translate-x-0.5 active:shadow-pop-active"
               title="Logout"
             >
-              <LogOut size={20} />
+              <LogOut size={18} strokeWidth={2.5} />
             </button>
           </div>
         </div>

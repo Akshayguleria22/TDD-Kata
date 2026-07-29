@@ -411,3 +411,55 @@
 ---
 
 ### ✅ PHASE 4 COMPLETE — Frontend SPA Implementation fully built and connected!
+
+---
+
+## Phase 4.5: UI/UX Overhaul — Playful Geometric Design System
+
+**Prompt:**
+> Completely redesign the frontend of the Car Dealership Inventory System using a Playful Geometric (Neo-Brutalist / Memphis-style) design system. Transform the basic UI into a premium, tactile, and energetic experience.
+>
+> **Design System Tokens:**
+> - Colors: Warm Cream (#FFFDF5), Slate 800 (#1E293B), Vivid Violet (#8B5CF6), Hot Pink (#F472B6), Amber (#FBBF24)
+> - Typography: Outfit (headings), Plus Jakarta Sans (body)
+> - Hard "Pop" Shadows with no blur: `4px_4px_0px_0px_#1E293B`
+> - Chunky borders: `border-2 border-foreground`
+> - Tactile interactions: hover lift + active press on all buttons
+> - Lucide React icons with strokeWidth 2.5
+
+**Phase:** Phase 4.5 — UI/UX Overhaul (Playful Geometric Design)
+
+**Technical Objective:**
+- Define the complete design system via Tailwind CSS v4 `@theme` directives (colors, fonts, shadows).
+- Import Google Fonts (Outfit 700/800, Plus Jakarta Sans 400/500/600/700).
+- Apply the "Candy Button" pattern to all interactive elements (hard shadow, hover lift, active press).
+- Apply geometric input styling with accent-colored focus shadows.
+- Transform Vehicle Cards into "Sticker Cards" with rotation and scale hover effects.
+- Redesign auth pages with polka-dot backgrounds and massive sticker form cards.
+- Overhaul admin table with chunky borders, icon action buttons, and sticker modal.
+- Update Navbar with bold Outfit logo, thick bottom border, and pill-style nav links.
+
+**Design Decisions:**
+- **Tailwind v4:** Project uses `@tailwindcss/vite` v4.3.3, so all theme config lives in `@theme` blocks in `index.css` rather than `tailwind.config.js`.
+- **No shared component abstractions:** Button/input styles applied inline to match existing code pattern.
+- **Polka-dot CSS pattern:** Defined as a utility class `.bg-polka-dots` in `index.css` for the auth page backgrounds.
+
+**Execution Cycle:**
+1. **Step 1 (Core Config):** Updated `index.html` with Google Fonts links. Rewrote `index.css` with `@theme` block defining custom colors, fonts, and shadow tokens. Cleared `App.css` scaffold boilerplate. Updated `App.tsx` root wrapper to use design system classes.
+2. **Step 2 (Candy Buttons & Inputs):** Applied inline within Steps 3–4. All buttons use: chunky border, pop shadow, hover lift (`-translate-y-0.5`), active press (`translate-y-0.5`). All inputs use: `border-2`, `rounded-xl`, accent focus shadow.
+3. **Step 3 (Sticker Vehicle Cards):** Overhauled `VehicleCard.tsx` with hard shadow card, hover rotation/scale, Outfit title, tertiary category pill badge, accent price, stock indicator with bordered dot, pop-shadow purchase button.
+4. **Step 4 (Layouts & Dashboard):** Overhauled `Navbar.tsx` (thick border, Outfit logo, secondary admin pill, circular logout), `Login.tsx` & `Register.tsx` (polka-dot background, sticker form card, geometric inputs, candy submit), `Dashboard.tsx` (sticker filter bar, geometric inputs, playful empty state), `Admin.tsx` (sticker table, chunky icon action buttons, sticker modal with accent/ghost candy buttons).
+
+**Files Modified:**
+- `frontend/index.html` — [MODIFIED] Google Fonts preconnect + stylesheet, updated title
+- `frontend/src/index.css` — [MODIFIED] Complete rewrite with Tailwind v4 @theme design tokens
+- `frontend/src/App.css` — [MODIFIED] Cleared Vite scaffold boilerplate
+- `frontend/src/App.tsx` — [MODIFIED] Root wrapper uses design system classes
+- `frontend/src/components/Navbar.tsx` — [MODIFIED] Neo-Brutalist navbar with Outfit logo, pop-shadow buttons
+- `frontend/src/components/VehicleCard.tsx` — [MODIFIED] Sticker card with hover rotation, candy purchase button
+- `frontend/src/pages/Login.tsx` — [MODIFIED] Polka-dot background, sticker form card, geometric inputs
+- `frontend/src/pages/Register.tsx` — [MODIFIED] Consistent with Login, secondary accent color
+- `frontend/src/pages/Dashboard.tsx` — [MODIFIED] Sticker filter bar, geometric inputs, playful empty state
+- `frontend/src/pages/Admin.tsx` — [MODIFIED] Sticker table, chunky action buttons, sticker modal
+
+---

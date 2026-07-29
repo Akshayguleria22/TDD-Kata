@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShoppingCart, Loader2, Info } from 'lucide-react';
+import { ShoppingCart, Loader2, Info, Tag } from 'lucide-react';
 import api from '../api/axios';
 
 export interface Vehicle {
@@ -42,35 +42,38 @@ const VehicleCard = ({ vehicle, onPurchaseSuccess }: VehicleCardProps) => {
   const inStock = vehicle.quantity > 0;
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition flex flex-col h-full relative">
+    <div className="bg-white border-2 border-foreground rounded-2xl shadow-pop-lg hover:rotate-[-1deg] hover:scale-[1.02] transition-all duration-300 overflow-hidden flex flex-col h-full relative">
+      {/* Card Body */}
       <div className="p-5 flex-grow">
-        <div className="flex justify-between items-start mb-2">
+        <div className="flex justify-between items-start mb-3">
           <div>
-            <h3 className="text-lg font-bold text-gray-900">
+            <h3 className="text-lg font-heading font-bold text-foreground">
               {vehicle.year} {vehicle.make} {vehicle.model}
             </h3>
-            <span className="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-md mt-1">
+            <span className="inline-flex items-center gap-1 bg-tertiary/20 text-foreground border-2 border-foreground rounded-full text-xs font-bold px-3 py-1 mt-2">
+              <Tag size={12} strokeWidth={2.5} />
               {vehicle.category}
             </span>
           </div>
           <div className="text-right">
-            <span className="text-xl font-bold text-blue-600">
+            <span className="text-2xl font-heading font-extrabold text-accent">
               ${vehicle.price.toLocaleString()}
             </span>
           </div>
         </div>
         
         {vehicle.description && (
-          <p className="text-gray-600 text-sm mt-3 line-clamp-2">
+          <p className="text-foreground/60 text-sm mt-3 line-clamp-2 font-body">
             {vehicle.description}
           </p>
         )}
       </div>
 
-      <div className="bg-gray-50 p-4 border-t border-gray-100 flex items-center justify-between">
+      {/* Card Footer */}
+      <div className="bg-background p-4 border-t-2 border-foreground flex items-center justify-between">
         <div className="flex items-center">
-          <span className={`inline-flex items-center gap-1 text-sm font-medium ${inStock ? 'text-green-600' : 'text-red-600'}`}>
-            <span className={`w-2 h-2 rounded-full ${inStock ? 'bg-green-500' : 'bg-red-500'}`}></span>
+          <span className={`inline-flex items-center gap-1.5 text-sm font-bold ${inStock ? 'text-green-600' : 'text-red-500'}`}>
+            <span className={`w-2.5 h-2.5 rounded-full border-2 ${inStock ? 'bg-green-400 border-green-600' : 'bg-red-400 border-red-600'}`}></span>
             {inStock ? `${vehicle.quantity} In Stock` : 'Out of Stock'}
           </span>
         </div>
@@ -78,24 +81,25 @@ const VehicleCard = ({ vehicle, onPurchaseSuccess }: VehicleCardProps) => {
         <button
           onClick={handlePurchase}
           disabled={!inStock || purchasing}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${
+          className={`flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold border-2 transition-all duration-200 ${
             inStock 
-              ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm' 
-              : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+              ? 'bg-accent text-white border-foreground shadow-pop hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-pop-hover active:translate-y-0.5 active:translate-x-0.5 active:shadow-pop-active' 
+              : 'bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed'
           }`}
         >
           {purchasing ? (
-            <Loader2 size={16} className="animate-spin" />
+            <Loader2 size={16} strokeWidth={2.5} className="animate-spin" />
           ) : (
-            <ShoppingCart size={16} />
+            <ShoppingCart size={16} strokeWidth={2.5} />
           )}
           Purchase
         </button>
       </div>
 
+      {/* Error Toast */}
       {error && (
-        <div className="absolute top-2 right-2 left-2 bg-red-100 text-red-700 text-xs px-3 py-2 rounded shadow flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
-          <Info size={14} />
+        <div className="absolute top-3 right-3 left-3 bg-red-50 text-red-600 border-2 border-red-300 text-xs px-3 py-2 rounded-xl shadow-pop font-bold flex items-center gap-2">
+          <Info size={14} strokeWidth={2.5} />
           {error}
         </div>
       )}

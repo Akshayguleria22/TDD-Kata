@@ -35,25 +35,28 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
+    <div className="min-h-screen flex items-center justify-center bg-background bg-polka-dots px-4">
+      <div className="max-w-md w-full bg-white border-2 border-foreground rounded-2xl shadow-pop-lg p-8">
+        {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 text-green-600 mb-4">
-            <UserPlus size={32} />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary/10 border-2 border-secondary text-secondary mb-4">
+            <UserPlus size={32} strokeWidth={2.5} />
           </div>
-          <h2 className="text-3xl font-bold text-gray-900">Create Account</h2>
-          <p className="text-gray-500 mt-2">Join to start managing inventory</p>
+          <h2 className="text-3xl font-heading font-extrabold text-foreground">Create Account</h2>
+          <p className="text-foreground/50 mt-2 font-body font-medium">Join to start managing inventory</p>
         </div>
 
+        {/* Error Alert */}
         {error && (
-          <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6 text-sm">
+          <div className="bg-red-50 text-red-600 border-2 border-red-300 p-4 rounded-xl mb-6 text-sm font-bold">
             {error}
           </div>
         )}
 
+        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-bold text-foreground mb-1.5 font-body">
               Full Name
             </label>
             <input
@@ -61,13 +64,13 @@ const Register = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition"
+              className="w-full px-4 py-2.5 bg-white border-2 border-slate-300 rounded-xl font-body transition-all outline-none focus:border-secondary focus:shadow-[4px_4px_0px_0px_#F472B6]"
               placeholder="John Doe"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-bold text-foreground mb-1.5 font-body">
               Email Address
             </label>
             <input
@@ -75,13 +78,13 @@ const Register = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition"
+              className="w-full px-4 py-2.5 bg-white border-2 border-slate-300 rounded-xl font-body transition-all outline-none focus:border-secondary focus:shadow-[4px_4px_0px_0px_#F472B6]"
               placeholder="john@example.com"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-bold text-foreground mb-1.5 font-body">
               Password
             </label>
             <input
@@ -90,7 +93,7 @@ const Register = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition"
+              className="w-full px-4 py-2.5 bg-white border-2 border-slate-300 rounded-xl font-body transition-all outline-none focus:border-secondary focus:shadow-[4px_4px_0px_0px_#F472B6]"
               placeholder="••••••••"
             />
           </div>
@@ -98,19 +101,20 @@ const Register = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition duration-200 flex items-center justify-center disabled:opacity-70 mt-4"
+            className="w-full bg-secondary text-white font-bold border-2 border-foreground rounded-full py-3 shadow-pop transition-all duration-200 flex items-center justify-center hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-pop-hover active:translate-y-0.5 active:translate-x-0.5 active:shadow-pop-active disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:shadow-pop mt-2"
           >
             {loading ? (
-              <Loader2 className="animate-spin mr-2" size={20} />
+              <Loader2 className="animate-spin mr-2" size={20} strokeWidth={2.5} />
             ) : (
               'Create Account'
             )}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-gray-600 text-sm">
+        {/* Footer Link */}
+        <p className="mt-6 text-center text-foreground/60 text-sm font-body">
           Already have an account?{' '}
-          <Link to="/login" className="text-green-600 hover:underline font-medium">
+          <Link to="/login" className="text-secondary hover:text-accent font-bold transition-colors">
             Sign in here
           </Link>
         </p>
