@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import VehicleCard, { Vehicle } from '../components/VehicleCard';
+import VehicleCard from '../components/VehicleCard';
+import type { Vehicle } from '../components/VehicleCard';
 import api from '../api/axios';
 import Navbar from '../components/Navbar';
+import LiveActivityTicker from '../components/LiveActivityTicker';
 import { Zap, ShieldCheck, BarChart3, ArrowRight, CarFront, Sparkles, Loader2 } from 'lucide-react';
 
 const features = [
@@ -183,34 +185,8 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* ══════════════ TECH STACK STRIP ══════════════ */}
-      <section className="border-t-2 border-foreground bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm font-bold text-foreground/50 font-body">
-            <span className="bg-white border-2 border-foreground rounded-full px-4 py-1.5 shadow-[2px_2px_0px_0px_#1E293B]">React</span>
-            <span className="bg-white border-2 border-foreground rounded-full px-4 py-1.5 shadow-[2px_2px_0px_0px_#1E293B]">TypeScript</span>
-            <span className="bg-white border-2 border-foreground rounded-full px-4 py-1.5 shadow-[2px_2px_0px_0px_#1E293B]">Node.js</span>
-            <span className="bg-white border-2 border-foreground rounded-full px-4 py-1.5 shadow-[2px_2px_0px_0px_#1E293B]">Express</span>
-            <span className="bg-white border-2 border-foreground rounded-full px-4 py-1.5 shadow-[2px_2px_0px_0px_#1E293B]">MongoDB</span>
-            <span className="bg-white border-2 border-foreground rounded-full px-4 py-1.5 shadow-[2px_2px_0px_0px_#1E293B]">JWT Auth</span>
-            <span className="bg-white border-2 border-foreground rounded-full px-4 py-1.5 shadow-[2px_2px_0px_0px_#1E293B]">TDD / Jest</span>
-            <span className="bg-white border-2 border-foreground rounded-full px-4 py-1.5 shadow-[2px_2px_0px_0px_#1E293B]">Tailwind CSS v4</span>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════ FOOTER ══════════════ */}
-      <footer className="border-t-2 border-foreground bg-foreground text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between">
-          <div className="flex items-center gap-2 font-heading font-bold text-lg">
-            <CarFront size={22} strokeWidth={2.5} />
-            AutoInventory
-          </div>
-          <p className="text-white/50 text-sm font-body">
-            Built with TDD • 60+ Tests • Full-Stack MERN
-          </p>
-        </div>
-      </footer>
+      {/* ══════════════ LIVE ACTIVITY TICKER & FOOTER ══════════════ */}
+      <LiveActivityTicker />
     </div>
   );
 };

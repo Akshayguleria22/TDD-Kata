@@ -612,3 +612,28 @@
 - `frontend/src/pages/LandingPage.tsx` — [MODIFIED] Replaced static dummy data with dynamic API data.
 
 ---
+
+## Phase 4.8: The "Hire Me" Features (Step 2)
+
+**Prompt:**
+> yes proceed with step 2 but fix this SyntaxError: The requested module '/src/components/VehicleCard.tsx?t=1785323006978' does not provide an export named 'Vehicle' (at LandingPage.tsx:4:23)
+
+**Phase:** Phase 4.8 — The "Hire Me" Features (Step 2)
+
+**Technical Objective:**
+- Fix the TypeScript `SyntaxError` caused by importing an interface as a value in Vite.
+- Remove the static tech stack footer on the Landing Page.
+- Create a `LiveActivityTicker` component that dynamically pulls the active database inventory.
+- Implement the ticker at the bottom of the screen.
+
+**Execution Cycle:**
+1. Fixed the import in `LandingPage.tsx` by explicitly using `import type { Vehicle }`.
+2. Created `LiveActivityTicker.tsx` which fetches the top 5 vehicles from the API.
+3. Built a pure CSS marquee inside the new ticker displaying dynamic stock deals ("HOT DEAL: [Vehicle Name] for $[Price]!").
+4. Replaced the static tech stack and footer in `LandingPage.tsx` with the new dynamic `<LiveActivityTicker />`.
+
+**Files Modified:**
+- `frontend/src/components/LiveActivityTicker.tsx` — [NEW] Live scrolling inventory feed.
+- `frontend/src/pages/LandingPage.tsx` — [MODIFIED] Fixed types and added dynamic ticker.
+
+---
