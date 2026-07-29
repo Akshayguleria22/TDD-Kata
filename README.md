@@ -2,26 +2,62 @@
 
 A full-stack, real-time Car Dealership Inventory System designed with a Playful Geometric (Neo-Brutalist) aesthetic. It provides secure purchasing, real-time stock management, and a robust admin dashboard for complete CRUD capabilities over vehicle inventory.
 
-## 📸 App Preview
+## 📸 Application Walkthrough
 
 <details>
-<summary><strong>Click to view full application preview</strong></summary>
+<summary><strong>Click to view the complete visual flow of the application</strong></summary>
+<br>
 
-![Preview 1](./preview/screenshot-1.png)
-![Preview 2](./preview/screenshot-2.png)
-![Preview 3](./preview/screenshot-3.png)
-![Preview 4](./preview/screenshot-4.png)
-![Preview 5](./preview/screenshot-5.png)
-![Preview 6](./preview/screenshot-6.png)
-![Preview 7](./preview/screenshot-7.png)
-![Preview 8](./preview/screenshot-8.png)
-![Preview 9](./preview/screenshot-9.png)
-![Preview 10](./preview/screenshot-10.png)
-![Preview 11](./preview/screenshot-11.png)
-![Preview 12](./preview/screenshot-12.png)
-![Preview 13](./preview/screenshot-13.png)
-![Preview 14](./preview/screenshot-14.png)
-![Preview 15](./preview/screenshot-15.png)
+### 1. The Landing Experience
+Users are greeted with a vibrant, Neo-Brutalist landing page. The hero section dynamically features available inventory.
+![Landing Page Hero](./preview/screenshot-2.png)
+
+Scrolling down reveals the enterprise-grade features that power the application.
+![Features Overview](./preview/screenshot-3.png)
+
+A live activity ticker constantly scrolls at the bottom, showcasing real-time hot deals.
+![Live Ticker & Footer](./preview/screenshot-8.png)
+
+The hero section dynamically updates to feature different high-priority stock.
+![Dynamic Hero Vehicle](./preview/screenshot-7.png)
+
+### 2. Secure Authentication
+To purchase a vehicle or access the admin panel, users must authenticate via secure JWT login forms.
+![Sign In Form](./preview/screenshot-15.png)
+
+New users can easily register through the visually cohesive sign-up form.
+![Create Account Form](./preview/screenshot-14.png)
+
+### 3. Browsing & Smart Search
+If the dealership currently has no matching cars, users are presented with a clean empty state.
+![Empty Inventory](./preview/screenshot-1.png)
+
+Once populated, users can browse the available fleet and use traditional filters (Make, Model, Price).
+![Populated Inventory](./preview/screenshot-6.png)
+
+**AI-Powered Search:** Users can type natural language queries (e.g., "Show me car under 10000"), and the NLP engine instantly parses it into structured filters!
+![AI Smart Search](./preview/screenshot-9.png)
+
+### 4. Algorithmic Recommendations
+When a user views a specific vehicle, the system's recommendation engine analyzes price and category to suggest similar alternatives.
+![Recommendation Engine](./preview/screenshot-10.png)
+
+### 5. Admin Dashboard & Inventory Management
+Admins have access to a secure dashboard to manage the entire fleet.
+![Admin Dashboard - Initial](./preview/screenshot-4.png)
+
+Adding a new vehicle is handled through a sleek modal interface.
+![Add Vehicle Modal](./preview/screenshot-5.png)
+
+Robust form controls ensure all vehicle data is clean before it hits the database.
+![Add Vehicle Form](./preview/screenshot-13.png)
+
+As the fleet grows, the Admin Dashboard scales to manage all stock, categories, and pricing.
+![Admin Dashboard - Populated](./preview/screenshot-11.png)
+
+### 6. Enterprise Telemetry
+Admins can monitor the application's real-time performance through the **System Health Monitor**, tracking API latency, MongoDB status, active WebSockets, and Node.js memory heap.
+![System Health Monitor](./preview/screenshot-12.png)
 
 </details>
 
