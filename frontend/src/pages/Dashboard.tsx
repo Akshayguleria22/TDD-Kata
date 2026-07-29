@@ -25,6 +25,10 @@ const Dashboard = () => {
   const [parsedFilters, setParsedFilters] = useState<any>(null);
   const [smartError, setSmartError] = useState('');
 
+  // Recommendation Engine state
+  const [recommendations, setRecommendations] = useState<Vehicle[]>([]);
+  const [recsLoading, setRecsLoading] = useState(false);
+
   const fetchVehicles = useCallback(async () => {
     setLoading(true);
     try {
@@ -48,6 +52,29 @@ const Dashboard = () => {
   useEffect(() => {
     fetchVehicles();
   }, [fetchVehicles]);
+
+  // Fetch recommendations based on the first vehicle in the view
+  useEffect(() => {
+    const target = vehicles[0];
+    if (!target) {
+      setRecommendations([]);
+      return;
+    }
+
+    const fetchRecs = async () => {
+      setRecsLoading(true);
+      try {
+        const response = await api.get(`/vehicles/${target._id}/recommendations`);
+        setRecommendations(response.data.data);
+      } catch (error) {
+        console.error('Failed to fetch recommendations', error);
+      } finally {
+        setRecsLoading(false);
+      }
+    };
+    
+    fetchRecs();
+  }, [vehicles[0]?._id]);
 
   // AI Smart Search handler
   const handleSmartSearch = async (e: React.FormEvent) => {
@@ -301,6 +328,33 @@ const Dashboard = () => {
             </AnimatePresence>
           </motion.div>
         )}
+
+        {/* Similar Vehicles Recommendation Engine */}
+        {vehicles.length > 0 && recommendations.length > 0 && (
+          <div className="mt-16 mb-8 pt-10 border-t-4 border-foreground/10">
+            <div className="flex items-center gap-2 mb-8">
+              <Sparkles size={28} className="text-accent" />
+              <h2 className="text-3xl font-heading font-extrabold text-foreground">
+                Because you viewed {vehicles[0].make} {vehicles[0].model}
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {recsLoading ? (
+                [...Array(4)].map((_, i) => <VehicleCardSkeleton key={`rec-skel-${i}`} />)
+              ) : (
+                recommendations.map(vehicle => (
+                  <VehicleCard 
+                    key={`rec-${vehicle._id}`} 
+                    vehicle={vehicle} 
+                    onPurchaseSuccess={handlePurchaseSuccess}
+                  />
+                ))
+              )}
+            </div>
+          </div>
+        )}
+
       </main>
     </div>
   );

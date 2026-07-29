@@ -7,7 +7,8 @@ import {
   updateVehicle, 
   deleteVehicle,
   purchaseVehicle,
-  restockVehicle
+  restockVehicle,
+  getRecommendations
 } from '../controllers/vehicleController';
 import { smartSearch } from '../controllers/smartSearchController';
 import { authMiddleware, adminOnlyMiddleware } from '../middleware/authMiddleware';
@@ -22,6 +23,7 @@ router.post('/smart-search', smartSearch);
 router.get('/search', searchVehicles);
 router.get('/', getVehicles);
 
+router.get('/:id/recommendations', getRecommendations);
 router.put('/:id', adminOnlyMiddleware, updateVehicle);
 router.delete('/:id', adminOnlyMiddleware, deleteVehicle);
 

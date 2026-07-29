@@ -286,3 +286,61 @@ export const restockVehicle = async (req: Request, res: Response): Promise<void>
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
+
+/**
+ * GET /api/vehicles/:id/recommendations
+ * Algorithmic recommendation engine based on weighted similarity scoring.
+ */
+export const getRecommendations = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    if (typeof id !== 'string' || !id.match(/^[0-9a-fA-F]{24}$/)) {
+      res.status(400).json({ success: false, message: 'Invalid vehicle ID' });
+      return;
+    }
+
+    // 1. Fetch target vehicle
+    const targetVehicle = await Vehicle.findById(id);
+    if (!targetVehicle) {
+      res.status(404).json({ success: false, message: 'Vehicle not found' });
+      return;
+    }
+
+    // 2. Fetch all other vehicles
+    const allOtherVehicles = await Vehicle.find({ _id: { $ne: id } });
+
+    // 3. Compute weighted similarity scores
+    const scoredVehicles = allOtherVehicles.map(vehicle => {
+      let score = 0;
+      
+      // Category match (High weight)
+      if (vehicle.category.toLowerCase() === targetVehicle.category.toLowerCase()) {
+        score += 50;
+      }
+      
+      // Make match (Medium weight)
+      if (vehicle.make.toLowerCase() === targetVehicle.make.toLowerCase()) {
+        score += 20;
+      }
+
+      // Price proximity (Medium weight up to 30)
+      const priceDiff = Math.abs(vehicle.price - targetVehicle.price);
+      const maxPrice = Math.max(vehicle.price, targetVehicle.price);
+      if (maxPrice > 0) {
+        const priceScore = 30 * (1 - (priceDiff / maxPrice));
+        score += Math.max(0, priceScore); 
+      }
+
+      return { vehicle, score };
+    });
+
+    // 4. Sort by score descending and take top 4
+    scoredVehicles.sort((a, b) => b.score - a.score);
+    const topRecommendations = scoredVehicles.slice(0, 4).map(v => v.vehicle);
+
+    res.status(200).json({ success: true, data: topRecommendations });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};

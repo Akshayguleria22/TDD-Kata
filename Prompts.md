@@ -702,3 +702,29 @@
 - `backend/src/controllers/vehicleController.ts` — [MODIFIED] Added caching logic and cache invalidation.
 
 ---
+
+## Phase 5: Enterprise Architecture (Step 2)
+
+**Prompt:**
+> Phase 5 - Enterprise Architecture (Step 2: Algorithmic Recommendation Engine)
+
+**Technical Objectives:**
+1. Create a `GET /api/vehicles/:id/recommendations` endpoint.
+2. Implement a custom weighted scoring function (category match = high, price proximity = medium, make match = medium).
+3. Add a "Similar Vehicles" row at the bottom of the dashboard.
+
+**Execution Cycle:**
+1. Built `getRecommendations` in `vehicleController.ts` which fetches all other vehicles and scores them:
+   - +50 if category matches
+   - +20 if make matches
+   - Up to +30 points based on price proximity using formula: `30 * (1 - (priceDiff / maxPrice))`
+2. Registered `GET /:id/recommendations` in `vehicleRoutes.ts`.
+3. In `Dashboard.tsx`, added a `useEffect` that automatically monitors the top vehicle in the inventory view (`vehicles[0]`). If it exists, it dynamically queries the recommendations endpoint.
+4. Rendered a "Because you viewed [Make] [Model]" section at the bottom of the Dashboard using a 4-column grid of `VehicleCard` components for the recommended vehicles.
+
+**Files Modified:**
+- `backend/src/controllers/vehicleController.ts` — [MODIFIED] Added `getRecommendations` engine.
+- `backend/src/routes/vehicleRoutes.ts` — [MODIFIED] Added recommendations route.
+- `frontend/src/pages/Dashboard.tsx` — [MODIFIED] Added UI and data fetching for Similar Vehicles.
+
+---
