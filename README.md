@@ -12,9 +12,6 @@ A full-stack, real-time Car Dealership Inventory System designed with a Playful 
 Users are greeted with a vibrant, Neo-Brutalist landing page. The hero section dynamically features available inventory.
 ![Landing Page Hero](./preview/screenshot-2.png)
 
-Scrolling down reveals the enterprise-grade features that power the application.
-![Features Overview](./preview/screenshot-3.png)
-
 A live activity ticker constantly scrolls at the bottom, showcasing real-time hot deals.
 ![Live Ticker & Footer](./preview/screenshot-8.png)
 
@@ -31,9 +28,6 @@ New users can easily register through the visually cohesive sign-up form.
 ### 3. Browsing & Smart Search
 If the dealership currently has no matching cars, users are presented with a clean empty state.
 ![Empty Inventory](./preview/screenshot-1.png)
-
-Once populated, users can browse the available fleet and use traditional filters (Make, Model, Price).
-![Populated Inventory](./preview/screenshot-6.png)
 
 **AI-Powered Search:** Users can type natural language queries (e.g., "Show me car under 10000"), and the NLP engine instantly parses it into structured filters!
 ![AI Smart Search](./preview/screenshot-9.png)
