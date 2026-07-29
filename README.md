@@ -2,6 +2,29 @@
 
 A full-stack, real-time Car Dealership Inventory System designed with a Playful Geometric (Neo-Brutalist) aesthetic. It provides secure purchasing, real-time stock management, and a robust admin dashboard for complete CRUD capabilities over vehicle inventory.
 
+## 📸 App Preview
+
+<details>
+<summary><strong>Click to view full application preview</strong></summary>
+
+![Preview 1](./preview/screenshot-1.png)
+![Preview 2](./preview/screenshot-2.png)
+![Preview 3](./preview/screenshot-3.png)
+![Preview 4](./preview/screenshot-4.png)
+![Preview 5](./preview/screenshot-5.png)
+![Preview 6](./preview/screenshot-6.png)
+![Preview 7](./preview/screenshot-7.png)
+![Preview 8](./preview/screenshot-8.png)
+![Preview 9](./preview/screenshot-9.png)
+![Preview 10](./preview/screenshot-10.png)
+![Preview 11](./preview/screenshot-11.png)
+![Preview 12](./preview/screenshot-12.png)
+![Preview 13](./preview/screenshot-13.png)
+![Preview 14](./preview/screenshot-14.png)
+![Preview 15](./preview/screenshot-15.png)
+
+</details>
+
 ## 🚀 Features
 
 ### 🌟 Enterprise-Grade Enhancements (Going Beyond CRUD)
