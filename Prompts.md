@@ -556,3 +556,35 @@
 - `frontend/src/pages/Dashboard.tsx` — [MODIFIED] Applied motion grid and layout animations
 
 ---
+
+## Phase 4.7: Next-Level Polish & Real-Time Setup (Steps 2 & 3)
+
+**Prompt:**
+> add it.....it still looks so basic...you are an advanced ui ux designer...design world class craft so that it stand out in 1000 persons.....unleash your creativity to max creativity. do whatever you can...add anything that makes it wonderful. use any technology and framework that can do it
+
+**Phase:** Phase 4.7 — Maximum Wow Factor (Steps 2 & 3)
+
+**Technical Objective:**
+- Install and configure `socket.io` on the backend to emit real-time inventory changes.
+- Install `socket.io-client` on the frontend, wrap the application in a `SocketProvider`, and listen for real-time changes in the User Dashboard and Admin Dashboard.
+- Implement world-class micro-interactions: explosive confetti on purchase, neo-brutalist shimmering skeletons on loading, infinite marquee banners, and a subtle SVG noise overlay for a physical tactile feel.
+
+**Execution Cycle:**
+1. Created `backend/src/socket.ts` and attached it to the HTTP server in `server.ts`.
+2. Emitted `inventory_updated` and `inventory_deleted` events across all CRUD actions in `vehicleController.ts`.
+3. Created `SocketContext.tsx` on the frontend and wrapped `App.tsx`.
+4. Attached global SVG noise overlay to `App.tsx` via data URI.
+5. Implemented `react-fast-marquee` on `LandingPage.tsx`.
+6. Created a highly stylized `VehicleCardSkeleton.tsx` with neo-brutalist pulses and gradients.
+7. Added `react-confetti` to `VehicleCard.tsx` that triggers specifically on a successful purchase.
+8. Updated `Dashboard.tsx` and `Admin.tsx` with `useEffect` socket listeners to instantly update React state on inventory changes without a page refresh.
+
+**Files Modified:**
+- `backend/src/server.ts`, `backend/src/socket.ts`, `backend/src/controllers/vehicleController.ts` — [NEW & MODIFIED] Real-time engine.
+- `frontend/src/context/SocketContext.tsx`, `frontend/src/App.tsx` — [NEW & MODIFIED] WebSockets & Noise Overlay.
+- `frontend/src/components/VehicleCardSkeleton.tsx` — [NEW] Polished skeletons.
+- `frontend/src/components/VehicleCard.tsx` — [MODIFIED] Confetti micro-interaction.
+- `frontend/src/pages/LandingPage.tsx` — [MODIFIED] Infinite Marquee.
+- `frontend/src/pages/Dashboard.tsx`, `frontend/src/pages/Admin.tsx` — [MODIFIED] Socket listeners and optimistic UI.
+
+---

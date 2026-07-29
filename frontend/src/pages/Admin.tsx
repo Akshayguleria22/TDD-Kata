@@ -3,10 +3,12 @@ import Navbar from '../components/Navbar';
 import api from '../api/axios';
 import type { Vehicle } from '../components/VehicleCard';
 import { Plus, Edit2, Trash2, PackagePlus, X, Loader2 } from 'lucide-react';
+import { useSocket } from '../context/SocketContext';
 
 const Admin = () => {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
+  const { socket } = useSocket();
   
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,6 +37,33 @@ const Admin = () => {
   useEffect(() => {
     fetchVehicles();
   }, []);
+
+  // Real-time socket listeners
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleInventoryUpdated = (updatedVehicle: Vehicle) => {
+      setVehicles(prev => {
+        const exists = prev.find(v => v._id === updatedVehicle._id);
+        if (exists) {
+          return prev.map(v => v._id === updatedVehicle._id ? updatedVehicle : v);
+        }
+        return [updatedVehicle, ...prev];
+      });
+    };
+
+    const handleInventoryDeleted = (id: string) => {
+      setVehicles(prev => prev.filter(v => v._id !== id));
+    };
+
+    socket.on('inventory_updated', handleInventoryUpdated);
+    socket.on('inventory_deleted', handleInventoryDeleted);
+
+    return () => {
+      socket.off('inventory_updated', handleInventoryUpdated);
+      socket.off('inventory_deleted', handleInventoryDeleted);
+    };
+  }, [socket]);
 
   const openAddModal = () => {
     setModalMode('add');

@@ -1,6 +1,7 @@
 // backend/src/controllers/vehicleController.ts
 import { Request, Response } from 'express';
 import Vehicle from '../models/Vehicle';
+import { getIO } from '../socket';
 
 /**
  * POST /api/vehicles
@@ -32,6 +33,9 @@ export const createVehicle = async (req: Request, res: Response): Promise<void> 
       success: true,
       data: vehicle,
     });
+    
+    // Emit real-time update
+    try { getIO().emit('inventory_updated', vehicle); } catch (e) {}
   } catch (error: any) {
     if (error.name === 'ValidationError') {
       res.status(400).json({
@@ -136,6 +140,9 @@ export const updateVehicle = async (req: Request, res: Response): Promise<void> 
     }
 
     res.status(200).json({ success: true, data: vehicle });
+
+    // Emit real-time update
+    try { getIO().emit('inventory_updated', vehicle); } catch (e) {}
   } catch (error: any) {
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
@@ -163,6 +170,9 @@ export const deleteVehicle = async (req: Request, res: Response): Promise<void> 
     }
 
     res.status(200).json({ success: true, data: {} });
+
+    // Emit real-time update
+    try { getIO().emit('inventory_deleted', id); } catch (e) {}
   } catch (error: any) {
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
@@ -200,6 +210,9 @@ export const purchaseVehicle = async (req: Request, res: Response): Promise<void
     }
 
     res.status(200).json({ success: true, data: vehicle });
+
+    // Emit real-time update
+    try { getIO().emit('inventory_updated', vehicle); } catch (e) {}
   } catch (error: any) {
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
@@ -240,6 +253,9 @@ export const restockVehicle = async (req: Request, res: Response): Promise<void>
     }
 
     res.status(200).json({ success: true, data: vehicle });
+
+    // Emit real-time update
+    try { getIO().emit('inventory_updated', vehicle); } catch (e) {}
   } catch (error: any) {
     res.status(500).json({ success: false, message: 'Internal server error' });
   }

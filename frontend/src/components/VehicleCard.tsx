@@ -3,6 +3,8 @@ import { ShoppingCart, Loader2, Info, Tag, CheckCircle2 } from 'lucide-react';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Confetti from 'react-confetti';
+import { useWindowSize } from 'react-use';
 
 export interface Vehicle {
   _id: string;
@@ -26,6 +28,8 @@ const VehicleCard = ({ vehicle, onPurchaseSuccess }: VehicleCardProps) => {
   const [success, setSuccess] = useState('');
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { width, height } = useWindowSize();
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const handlePurchase = async () => {
     if (!isAuthenticated) {
@@ -42,7 +46,9 @@ const VehicleCard = ({ vehicle, onPurchaseSuccess }: VehicleCardProps) => {
       const response = await api.post(`/vehicles/${vehicle._id}/purchase`);
       onPurchaseSuccess(response.data.data);
       setSuccess('Purchase successful! 🎉');
+      setShowConfetti(true);
       setTimeout(() => setSuccess(''), 3000);
+      setTimeout(() => setShowConfetti(false), 4000); // Stop confetti after 4s
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to purchase vehicle.');
       setTimeout(() => setError(''), 3000);
@@ -55,6 +61,16 @@ const VehicleCard = ({ vehicle, onPurchaseSuccess }: VehicleCardProps) => {
 
   return (
     <div className="bg-white border-2 border-foreground rounded-2xl shadow-pop-lg hover:rotate-[-1deg] hover:scale-[1.02] transition-all duration-300 overflow-hidden flex flex-col h-full relative">
+      
+      {/* Explosive Confetti (positioned absolute to card, though usually confetti is screen-wide, 
+          we'll make it screen-wide by using a portal or fixed, but standard react-confetti is fixed usually. 
+          Actually, react-confetti is fixed to window size by default, let's keep it that way for maximum wow) */}
+      {showConfetti && (
+        <div className="fixed inset-0 z-[100] pointer-events-none">
+          <Confetti width={width} height={height} recycle={false} numberOfPieces={500} gravity={0.2} />
+        </div>
+      )}
+
       {/* Card Body */}
       <div className="p-5 flex-grow">
         <div className="flex justify-between items-start mb-3">

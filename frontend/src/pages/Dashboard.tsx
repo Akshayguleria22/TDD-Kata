@@ -1,13 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import Navbar from '../components/Navbar';
 import VehicleCard, { type Vehicle } from '../components/VehicleCard';
+import VehicleCardSkeleton from '../components/VehicleCardSkeleton';
 import api from '../api/axios';
 import { Search, Loader2, FilterX, CarFront } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSocket } from '../context/SocketContext';
 
 const Dashboard = () => {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
+  const { socket } = useSocket();
   
   // Search state
   const [make, setMake] = useState('');
@@ -39,6 +42,35 @@ const Dashboard = () => {
   useEffect(() => {
     fetchVehicles();
   }, [fetchVehicles]);
+
+  // Real-time socket listeners
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleInventoryUpdated = (updatedVehicle: Vehicle) => {
+      setVehicles(prev => {
+        const exists = prev.find(v => v._id === updatedVehicle._id);
+        if (exists) {
+          return prev.map(v => v._id === updatedVehicle._id ? updatedVehicle : v);
+        }
+        // If it's a new vehicle, we could add it to the front of the list
+        // (but ideally check if it matches current search filters)
+        return [updatedVehicle, ...prev];
+      });
+    };
+
+    const handleInventoryDeleted = (id: string) => {
+      setVehicles(prev => prev.filter(v => v._id !== id));
+    };
+
+    socket.on('inventory_updated', handleInventoryUpdated);
+    socket.on('inventory_deleted', handleInventoryDeleted);
+
+    return () => {
+      socket.off('inventory_updated', handleInventoryUpdated);
+      socket.off('inventory_deleted', handleInventoryDeleted);
+    };
+  }, [socket]);
 
   const handleClearFilters = () => {
     setMake('');
@@ -147,9 +179,10 @@ const Dashboard = () => {
 
         {/* Vehicle Grid */}
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 text-foreground/50">
-            <Loader2 size={40} strokeWidth={2.5} className="animate-spin mb-4 text-accent" />
-            <p className="font-body font-medium">Loading inventory...</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <VehicleCardSkeleton key={i} />
+            ))}
           </div>
         ) : vehicles.length === 0 ? (
           <div className="bg-white border-2 border-foreground rounded-2xl shadow-pop p-12 text-center">

@@ -24,12 +24,28 @@ const features = [
   },
 ];
 
+import Marquee from 'react-fast-marquee';
+
 const LandingPage = () => {
   const { isAuthenticated } = useAuth();
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
+
+      {/* ══════════════ MARQUEE ══════════════ */}
+      <div className="bg-accent text-white font-heading font-extrabold border-b-2 border-foreground py-2 text-sm tracking-widest uppercase">
+        <Marquee speed={40} gradient={false} autoFill>
+          <span className="mx-4">🔥 HOT DEALS</span>
+          <span className="mx-4">•</span>
+          <span className="mx-4">REAL-TIME STOCK</span>
+          <span className="mx-4">•</span>
+          <span className="mx-4">SECURE PURCHASING</span>
+          <span className="mx-4">•</span>
+          <span className="mx-4">100% TDD TESTED</span>
+          <span className="mx-4">•</span>
+        </Marquee>
+      </div>
 
       {/* ══════════════ HERO SECTION ══════════════ */}
       <section className="relative overflow-hidden flex-grow flex items-center">
