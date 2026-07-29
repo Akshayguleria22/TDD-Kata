@@ -728,3 +728,24 @@
 - `frontend/src/pages/Dashboard.tsx` — [MODIFIED] Added UI and data fetching for Similar Vehicles.
 
 ---
+
+## Phase 5: Enterprise Architecture (Step 3)
+
+**Prompt:**
+> Phase 5 - Enterprise Architecture (Step 3: GitHub Actions CI/CD Pipeline)
+
+**Technical Objectives:**
+1. Create `.github/workflows/main.yml`.
+2. Configure a standard Node.js CI pipeline that installs dependencies, runs `npm test`, and enforces that all tests must pass before the build succeeds.
+
+**Execution Cycle:**
+1. Created `.github/workflows/main.yml`.
+2. Configured a GitHub Actions matrix workflow running Node.js 18.x and 20.x on `ubuntu-latest`.
+3. Set the working directory to `./backend`.
+4. Configured steps to checkout the repo, setup Node, cache NPM dependencies using `package-lock.json`, run `npm ci`, and run `npm test`.
+5. Added necessary environment variables (`PORT`, `MONGO_URI`, `JWT_SECRET`) for the backend test suite to pass.
+
+**Files Created:**
+- `.github/workflows/main.yml` — [NEW] GitHub Actions pipeline configuration.
+
+---
