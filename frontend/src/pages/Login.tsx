@@ -9,6 +9,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showAdminCreds, setShowAdminCreds] = useState(false);
   
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -102,6 +103,44 @@ const Login = () => {
             Register here
           </Link>
         </p>
+
+        {/* Evaluator Helper */}
+        <div className="mt-8 border-t-2 border-slate-200 pt-6">
+          <button 
+            type="button"
+            onClick={() => setShowAdminCreds(!showAdminCreds)}
+            className="w-full text-sm font-bold text-slate-500 hover:text-accent transition-colors flex items-center justify-center gap-2"
+          >
+            Are you an evaluator? Click here for admin details
+          </button>
+          
+          {showAdminCreds && (
+            <div className="mt-4 p-4 bg-accent/10 border-2 border-accent/30 rounded-xl text-sm font-medium animate-in fade-in slide-in-from-top-2">
+              <p className="mb-3 text-foreground font-bold">Admin Credentials:</p>
+              <div className="bg-white p-3 rounded-lg border-2 border-slate-200 space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-500">Email:</span>
+                  <span className="font-bold select-all">admin@example.com</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-500">Password:</span>
+                  <span className="font-bold select-all">admin123</span>
+                </div>
+                <button 
+                  type="button"
+                  onClick={() => {
+                    setEmail('admin@example.com');
+                    setPassword('admin123');
+                    setShowAdminCreds(false);
+                  }}
+                  className="w-full mt-3 bg-white text-accent font-bold border-2 border-accent rounded-lg py-2 shadow-sm hover:shadow-[2px_2px_0px_0px_#8B5CF6] hover:-translate-y-0.5 hover:-translate-x-0.5 active:translate-y-0 active:translate-x-0 active:shadow-sm transition-all"
+                >
+                  Auto-fill Credentials
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
